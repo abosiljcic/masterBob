@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>Master Bob - Request Service</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css">
+
+  <style>
+  .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Make container full height of the viewport */
+  }
+
+  .content {
+  flex: 1; /* Take remaining space */
+  padding: 20px;
+  }
+
+  .image {
+  flex: 1; /* Take remaining space */
+  text-align: center; /* Center image horizontally */
+  }
+
+  .image img {
+  max-width: 100%;
+  max-height: 100%;
+  }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="text-center" th:text="'Service request for ' + ${job.name}"></h2>
+    </div>
+  <div class="card-body">
+    <form th:action="@{/service_request}" method="post" th:object="${serviceRequest}">
+      <input type="hidden" name="jobId" th:value="${job.id}">
+      <div class="form-group mb-3">
+        <label class="form-label" for="address">Address:</label>
+        <input
+                class="form-control"
+                id="address"
+                name="address"
+                placeholder="Enter address"
+                th:field="*{customerAddress}"
+                type="text"
+                required
+        />
+        <p th:errors = "*{customerAddress}" class="text-danger"
+           th:if="${#fields.hasErrors('customerAddress')}"></p>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label" for="postCode">Post code:</label>
+        <input
+                class="form-control"
+                id="postCode"
+                name="postCode"
+                placeholder="Enter post code"
+                th:field="*{postCode}"
+                type="text"
+                required
+        />
+        <p th:errors = "*{postCode}" class="text-danger"
+           th:if="${#fields.hasErrors('postCode')}"></p>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label" for="serviceDate">Service date (You can leave this field empty if you want to adapt to the contractor)</label>
+        <label class="form-label" for="serviceDate">Please choose a time between 8:00 AM and 9:00 PM.</label>
+        <input
+                class="form-control datetimepicker"
+                id="serviceDate"
+                name="serviceDate"
+                placeholder="Enter service date"
+                th:field="*{dateTimeBeginString}"
+                type="datetime-local"
+        />
+        <p th:errors = "*{dateTimeBeginString}" class="text-danger"
+           th:if="${#fields.hasErrors('dateTimeBeginString')}"></p>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label" for="additionalInfo">Additional info (describe in more detail what you need)</label>
+        <textarea class="form-control" id="additionalInfo" name="additionalInfo" th:field="*{additionalInfo}"></textarea><br>
+        <p th:errors = "*{additionalInfo}" class="text-danger"
+           th:if="${#fields.hasErrors('additionalInfo')}"></p>
+      </div>
+
+      <div class="form-group-button">
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+
+    </form>
+    </div>
+</div>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    var input = document.getElementById('serviceDate');
+    var selectedDate = new Date(input.value);
+    var selectedTime = selectedDate.getHours() + selectedDate.getMinutes() / 60;
+
+    // Check if the selected time is between 8:00 AM and 9:00 PM
+    if (selectedTime < 8 || selectedTime > 21) {
+      event.preventDefault(); // Prevent form submission
+      alert('Please choose a time between 8:00 AM and 9:00 PM.');
+    }
+  });
+  var now = new Date();
+
+  var minDate = now.toISOString().slice(0, 16);
+
+  document.getElementById("serviceDate").min = minDate;
+
+</script>
+
+</body>
+</html>

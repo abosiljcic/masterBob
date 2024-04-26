@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Master Bob - Manage jobs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+
+  <div th:if="${message != null}" class="alert alert-success">
+    [[${message}]]
+  </div>
+
+  <h1 class="text-center">Manage jobs</h1>
+  <br/><br/>
+
+  <div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCenter">
+      Add new job
+    </button>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCenter1">
+      Add new job category
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">Add new job</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form
+                    method="post"
+                    role="form"
+                    th:action="@{/user/admin/new_job}"
+                    th:object="${job}"
+            >
+              <div class="form-group mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Enter job name"
+                        th:field="*{name}"
+                        type="text"
+                        required
+                />
+                <p th:errors = "*{name}" class="text-danger"
+                   th:if="${#fields.hasErrors('name')}"></p>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="description">Description</label>
+                <input
+                        class="form-control"
+                        id="description"
+                        name="description"
+                        placeholder="Enter job description"
+                        th:field="*{description}"
+                        type="text"
+                />
+                <p th:errors = "*{description}" class="text-danger"
+                   th:if="${#fields.hasErrors('description')}"></p>
+              </div>
+
+              <div class="form-group mb-3">
+                <label>Job category</label>
+                <select class="form-control" th:field="*{category}" id="category" name="category" required>
+                  <option value="" selected>Select category</option>
+                  <th:block th:each="category : ${jobCategoryList}">
+                    <option th:value="${category.id}" th:text="${category.category}"></option>
+                  </th:block>
+                </select>
+                <p th:errors = "*{category}" class="text-danger"
+                   th:if="${#fields.hasErrors('category')}"></p>
+              </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="modalCenter1" tabindex="-1" role="dialog" aria-labelledby="modalTitle1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle1">Add new job category</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form
+                    method="post"
+                    role="form"
+                    th:action="@{/user/admin/new_job_category}"
+                    th:object="${jobCategory}"
+            >
+              <div class="form-group mb-3">
+                <label class="form-label" for="categoryName">Category name</label>
+                <input
+                        class="form-control"
+                        id="categoryName"
+                        name="categoryName"
+                        placeholder="Enter category name"
+                        th:field="*{category}"
+                        type="text"
+                        required
+                />
+                <p th:errors = "*{category}" class="text-danger"
+                   th:if="${#fields.hasErrors('category')}"></p>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label" for="iconUrl">Icon url</label>
+                <input
+                        class="form-control"
+                        id="iconUrl"
+                        name="iconUrl"
+                        placeholder="Enter job description"
+                        th:field="*{iconUrl}"
+                        type="text"
+                />
+                <p th:errors = "*{iconUrl}" class="text-danger"
+                   th:if="${#fields.hasErrors('iconUrl')}"></p>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+<br><br><br>
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark" style="background-color: lightyellow;">
+    <tr>
+      <th>Job ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Category</th>
+      <th>Edit job</th>
+      <th>Delete job</th>
+    </tr>
+    </thead>
+    <tbody id="jobTableBody">
+    <tr th:each="job : ${jobList}">
+      <td th:text="${job.id}">Job ID</td>
+      <td th:text="${job.name}">Name</td>
+      <td th:text="${job.description}">Description</td>
+      <td th:text="${job.category.category}">Category</td>
+      <td style="text-align: center;">
+        <a class="btn btn-info btn-sm" th:href="@{'/user/admin/job/edit/' + ${job.id}}">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+      </td>
+      <td style="text-align: center;">
+        <a th:href="@{'/user/admin/job/delete/' + ${job.id}}">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+    document.querySelector('.modal-footer .btn-secondary').addEventListener('click', function () {
+        $('#yourModalId').modal('hide');
+    });
+
+</script>
+
+</body>
+</html>

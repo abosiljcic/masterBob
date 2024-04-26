@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>Master Bob - Master page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div>
+
+    <div th:if="${errorMessage != null}" class="alert alert-danger">
+        [[${errorMessage}]]
+    </div>
+
+    <h1 class="text-center">My service requests</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark" style="background-color: lightyellow;">
+        <tr>
+            <th>Customer name</th>
+            <th>Customer surname</th>
+            <th>Customer address</th>
+            <th>Additional info</th>
+            <th>Job</th>
+            <th>Service status</th>
+            <th>Date begin</th>
+            <th>Date end</th>
+            <th>Edit service request</th>
+            <th>Delete service request</th>
+        </tr>
+        </thead>
+        <tbody id="serviceRequestsTableBody">
+        <tr th:each="serviceRequest : ${serviceRequestList}">
+            <td th:text="${serviceRequest.customer.name}">>Customer name</td>
+            <td th:text="${serviceRequest.customer.surname}">Customer surname</td>
+            <td th:text="${serviceRequest.customerAddress}">Customer address</td>
+            <td th:text="${serviceRequest.additionalInfo}">Additional info</td>
+            <td th:text="${serviceRequest.job.id}">Job</td>
+            <td th:text="${serviceRequest.serviceStatus}">Service status</td>
+            <td th:text="${serviceRequest.dateTimeBegin}">Date begin</td>
+            <td th:text="${serviceRequest.dateTimeEnd}">Date end</td>
+            <td style="text-align: center;">
+                <a class="btn btn-info btn-sm" th:href="@{'/service_request/edit/' + ${serviceRequest.id}}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <a th:href="@{'/service_request/delete/' + ${serviceRequest.id}}">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
