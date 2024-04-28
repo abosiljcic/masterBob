@@ -7,6 +7,7 @@ import com.masterproject.Master.Bob.model.User;
 import com.masterproject.Master.Bob.repository.JobRepository;
 import com.masterproject.Master.Bob.repository.ServiceRequestRepository;
 import com.masterproject.Master.Bob.repository.UserRepository;
+import com.masterproject.Master.Bob.utility.DateTimeConverter;
 import com.masterproject.Master.Bob.utility.Email;
 import com.masterproject.Master.Bob.utility.NominatimAPI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class CustomerService {
         return userRepository.findByUsername(username);
     }
 
-    public void saveServiceRequest (ServiceRequest serviceRequest) throws IOException
+    public String saveServiceRequest (ServiceRequest serviceRequest) throws IOException
     {
         Optional<Job> job = getJobById(serviceRequest.getJob().getId());
         if(job.isEmpty())
@@ -55,25 +56,20 @@ public class CustomerService {
 
         JobCategory jobCategory = job.get().getCategory();
 
+        // Konverzija dateTimeBegin u Timestamp, odredjivanje dateTimeEnd
         Integer duration = job.get().getDuration() * 60 * 1000; // duration in milisec
-        Timestamp dateTimeBegin = serviceRequest.getDateTimeBegin();
-        long dateTimeEnd = dateTimeBegin.getTime() + duration;
+        DateTimeConverter dateTimeConverter = new DateTimeConverter();
+        serviceRequest.setDateTimeBegin(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString()));
+        long dateTimeEnd = serviceRequest.getDateTimeBegin().getTime() + duration;
         Timestamp newDateTimeEnd = new Timestamp(dateTimeEnd);
         serviceRequest.setDateTimeEnd(newDateTimeEnd);
-
-        System.out.println("dateTImeBegin: " + dateTimeBegin);
-        System.out.println("dateTimeEnd: " + newDateTimeEnd);
-
 
         Set<User> masters = jobCategory.getUsers();
 
         List<User> availableMasters = new ArrayList<>();
         for (User m : masters)
         {
-            System.out.println("MASTER: " + m);
-            System.out.println("Upit: " + serviceRequestRepository.getAvailableMasters(m.getId(), dateTimeBegin, newDateTimeEnd));
-            System.out.println("findById: " + serviceRequestRepository.findMasterById(m.getId()));
-            if(serviceRequestRepository.findMasterById(m.getId()) || serviceRequestRepository.getAvailableMasters(m.getId(), dateTimeBegin, newDateTimeEnd))
+            if(serviceRequestRepository.findMasterById(m.getId()) || serviceRequestRepository.getAvailableMasters(m.getId(), serviceRequest.getDateTimeBegin(), serviceRequest.getDateTimeEnd()))
             {
                 availableMasters.add(m);
                 System.out.println("Available master: " + m.getName());
@@ -82,13 +78,12 @@ public class CustomerService {
 
         // ukoliko nema dostupnih master-a, onda sve master-e koji rade u toj job kategoriji stavljam u dostupne
         // user-u se onda dodeljuje master koji mu je najblizi
+        String message = null;
         if (availableMasters.size() == 0)
         {
             availableMasters.addAll(masters);
+            message = "Successfully sent service request! There are no masters available in the period you entered. The date will most likely change.";
         }
-
-        System.out.println("Latitude customer: " + serviceRequest.getCustomer().getLatitude());
-        System.out.println("Longitude customer: " + serviceRequest.getCustomer().getLongitude());
 
         //trazi se najblizi master
         User theClosestMaster = getTheClosestMaster(availableMasters, serviceRequest.getCustomer().getLatitude(), serviceRequest.getCustomer().getLongitude());
@@ -96,7 +91,6 @@ public class CustomerService {
         serviceRequest.setMaster(theClosestMaster);
 
         // cuva se service request
-        System.out.println("Service request ID in service: " + serviceRequest.getId());
         serviceRequestRepository.save(serviceRequest);
 
         // Salje se mejl obavestenja master-u da ima novi service request
@@ -104,6 +98,8 @@ public class CustomerService {
         String text = "Dear, " + theClosestMaster.getName() + " " + theClosestMaster.getSurname() +
                 " You have new service request. Please check your account, Master Bob Team";
         email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","New service request",text,"");
+
+        return message;
     }
 
     //F-ja koja racuna udaljenost od dostupnih majstora do customer-a koji je podneo service_request

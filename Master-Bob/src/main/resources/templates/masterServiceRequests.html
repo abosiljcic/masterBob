@@ -18,6 +18,10 @@
         [[${errorMessage}]]
     </div>
 
+    <div th:if="${message != null}" class="alert alert-success">
+        [[${message}]]
+    </div>
+
     <h1 class="text-center">My service requests</h1>
 
     <table class="table table-bordered table-striped">
@@ -41,7 +45,7 @@
             <td th:text="${serviceRequest.customer.surname}">Customer surname</td>
             <td th:text="${serviceRequest.customerAddress}">Customer address</td>
             <td th:text="${serviceRequest.additionalInfo}">Additional info</td>
-            <td th:text="${serviceRequest.job.id}">Job</td>
+            <td th:text="${serviceRequest.job.name}">Job</td>
             <td th:text="${serviceRequest.serviceStatus}">Service status</td>
             <td th:text="${serviceRequest.dateTimeBegin}">Date begin</td>
             <td th:text="${serviceRequest.dateTimeEnd}">Date end</td>

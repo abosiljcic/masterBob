@@ -71,10 +71,6 @@ public class CustomerController {
         // Postavljanje statusa service request-a
         serviceRequest.setServiceStatus(ServiceStatus.PENDING);
 
-        // Konverzija datuma i vremena
-        DateTimeConverter dateTimeConverter = new DateTimeConverter();
-        serviceRequest.setDateTimeBegin(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString()));
-
         // Dohvatanje job-a
         Optional<Job> job = customerService.getJobById(id);
         if(job.isEmpty())
@@ -87,9 +83,15 @@ public class CustomerController {
 
         customerService.saveUserLongitudeLatitude(user.get());
 
-        customerService.saveServiceRequest(serviceRequest);
+        String message = customerService.saveServiceRequest(serviceRequest);
 
-        model.addAttribute("message","Successfully sent service request!");
+        if(message == null)
+        {
+            model.addAttribute("message","Successfully sent service request!");
+        }
+        else {
+            model.addAttribute("message", message);
+        }
 
         Integer categoryId = serviceRequest.getJob().getCategory().getId();
 
