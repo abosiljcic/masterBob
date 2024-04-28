@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <title>Master Bob - Edit service request</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style>
+        .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+  <div class="row col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-center">Edit service request</h2>
+      </div>
+
+      <div th:if="${errorMessage != null}" class="alert alert-danger">
+        [[${errorMessage}]]
+      </div>
+
+      <div class="card-body">
+        <form
+                method="post"
+                role="form"
+                th:action="@{'/service_request/save/edit/' + ${serviceRequest.id}}"
+                th:object="${serviceRequest}"
+        >
+          <input
+                  class="form-control"
+                  id="masterId"
+                  name="masterId"
+                  th:field="${serviceRequest.master.id}"
+                  type="hidden"
+          />
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="additionalInfo">Additional info</label>
+            <input
+                    class="form-control"
+                    id="additionalInfo"
+                    name="additionalInfo"
+                    th:field="*{additionalInfo}"
+                    type="text"
+            />
+            <p th:errors="*{additionalInfo}" class="text-danger"
+               th:if="${#fields.hasErrors('additionalInfo')}"></p>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>Service status</label>
+            <select class="form-control" th:field="*{serviceStatus}" id="editServiceStatus" name="editServiceStatus"
+                    required>
+              <option value="" disabled>Select status</option>
+              <th:block th:each="status : ${serviceStatuses}">
+                <option th:value="${status}" th:text="${status}"
+                        th:selected="${serviceStatus == status}"></option>
+              </th:block>
+            </select>
+            <p th:errors="*{serviceStatus}" class="text-danger"
+               th:if="${#fields.hasErrors('serviceStatus')}"></p>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="dateTimeBegin">Date begin</label>
+            <input
+                    class="form-control"
+                    id="dateTimeBegin"
+                    name="dateTimeBegin"
+                    th:field="*{dateTimeBeginString}"
+                    type="datetime-local"
+            />
+            <p th:errors="*{dateTimeBeginString}" class="text-danger"
+               th:if="${#fields.hasErrors('dateTimeBeginString')}"></p>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="dateTimeEnd">Date end</label>
+            <input
+                    class="form-control"
+                    id="dateTimeEnd"
+                    name="dateTimeEnd"
+                    th:field="*{dateTimeEndString}"
+                    type="datetime-local"
+            />
+            <p th:errors="*{dateTimeEndString}" class="text-danger"
+               th:if="${#fields.hasErrors('dateTimeEndString')}"></p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    th:onclick="|window.location.href='/service_request'|">Close
+            </button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

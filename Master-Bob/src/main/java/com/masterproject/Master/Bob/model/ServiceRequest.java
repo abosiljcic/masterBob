@@ -2,6 +2,7 @@ package com.masterproject.Master.Bob.model;
 
 import jakarta.persistence.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
@@ -33,12 +34,12 @@ public class ServiceRequest {
 
     private String dateTimeBeginString;
 
-
-    private String postCode;
-
     @Column(name = "date_time_end")
     private Timestamp dateTimeEnd;
 
+    private String dateTimeEndString;
+
+    private String postCode;
     @Column(name = "additional_info")
     private String additionalInfo;
 
@@ -67,22 +68,6 @@ public class ServiceRequest {
 
     public void setServiceStatus(ServiceStatus serviceStatus) {
         this.serviceStatus = serviceStatus;
-    }
-
-    public Timestamp getDateTimeBegin() {
-        return dateTimeBegin;
-    }
-
-    public void setDateTimeBegin(Timestamp dateTimeBegin) {
-        this.dateTimeBegin = dateTimeBegin;
-    }
-
-    public Timestamp getDateTimeEnd() {
-        return dateTimeEnd;
-    }
-
-    public void setDateTimeEnd(Timestamp dateTimeEnd) {
-        this.dateTimeEnd = dateTimeEnd;
     }
 
     public String getAdditionalInfo() {
@@ -117,6 +102,22 @@ public class ServiceRequest {
         this.customerAddress = customerAddress;
     }
 
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public Timestamp getDateTimeBegin() {
+        return dateTimeBegin;
+    }
+
+    public void setDateTimeBegin(Timestamp dateTimeBegin) {
+        this.dateTimeBegin = dateTimeBegin;
+    }
+
     public String getDateTimeBeginString() {
         return dateTimeBeginString;
     }
@@ -125,12 +126,20 @@ public class ServiceRequest {
         this.dateTimeBeginString = dateTimeBeginString;
     }
 
-
-    public String getPostCode() {
-        return postCode;
+    public Timestamp getDateTimeEnd() {
+        return dateTimeEnd;
     }
 
-    public void setPostCode(String postCode) {
-        this.postCode = postCode;
+    public void setDateTimeEnd(Timestamp dateTimeEnd) {
+        this.dateTimeEnd = dateTimeEnd;
     }
+
+    public String getDateTimeEndString() {
+        return dateTimeEndString;
+    }
+
+    public void setDateTimeEndString(String dateTimeEndString) {
+        this.dateTimeEndString = dateTimeEndString;
+    }
+
 }
