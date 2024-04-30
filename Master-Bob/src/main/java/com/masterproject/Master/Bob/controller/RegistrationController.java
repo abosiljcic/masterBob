@@ -1,29 +1,20 @@
 package com.masterproject.Master.Bob.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masterproject.Master.Bob.model.JobCategory;
 import com.masterproject.Master.Bob.model.User;
-import com.masterproject.Master.Bob.repository.JobCategoryRepository;
 import com.masterproject.Master.Bob.service.AdminService;
 import com.masterproject.Master.Bob.service.RegistrationService;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -37,8 +28,6 @@ public class RegistrationController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-
 
     @GetMapping("/register")
     public String userRegistration(Model model){

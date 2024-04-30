@@ -35,9 +35,12 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
+<div th:if="${message != null}" class="alert alert-success">
+    [[${message}]]
+</div>
+
 <div sec:authorize="isAuthenticated()">
     <div th:object="${user}">
-        <span>CAOOOOOO authenticated!</span>
         <div sec:authorize="hasRole('customer')">
             <div th:replace="~{fragments/customerPage :: customerPage}"></div>
         </div>

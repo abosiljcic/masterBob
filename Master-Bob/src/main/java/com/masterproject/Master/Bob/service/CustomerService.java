@@ -72,7 +72,6 @@ public class CustomerService {
             if(serviceRequestRepository.findMasterById(m.getId()) || serviceRequestRepository.getAvailableMasters(m.getId(), serviceRequest.getDateTimeBegin(), serviceRequest.getDateTimeEnd()))
             {
                 availableMasters.add(m);
-                System.out.println("Available master: " + m.getName());
             }
         }
 
@@ -95,8 +94,8 @@ public class CustomerService {
 
         // Salje se mejl obavestenja master-u da ima novi service request
         Email email = new Email();
-        String text = "Dear, " + theClosestMaster.getName() + " " + theClosestMaster.getSurname() +
-                " You have new service request. Please check your account, Master Bob Team";
+        String text = "Dear " + theClosestMaster.getName() + " " + theClosestMaster.getSurname() +
+                ", You have new service request. Please check your account, Master Bob Team";
         email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","New service request",text,"");
 
         return message;
