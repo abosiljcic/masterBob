@@ -41,7 +41,7 @@ public class MasterController {
     public String deleteServiceRequest(@PathVariable(name = "id") Integer serviceRequestId, Model model) {
         masterService.deleteServiceRequestById(serviceRequestId);
         model.addAttribute("message","Successfully deleted service request!");
-        // TODO : sending an email to the customer whose service request has been deleted
+
         return getMasterServiceRequests(model);
     }
 
@@ -58,7 +58,7 @@ public class MasterController {
     @PostMapping("/service_request/save/edit/{id}")
     public String saveEditedServiceRequest (@ModelAttribute ServiceRequest serviceRequest, Model model)
     {
-        String message = masterService.editServiceRequest(serviceRequest.getMaster().getId(),serviceRequest.getAdditionalInfo(),serviceRequest.getServiceStatus(),serviceRequest.getDateTimeBeginString(),serviceRequest.getDateTimeEndString(),serviceRequest.getId());
+        String message = masterService.editServiceRequest(serviceRequest);
 
         if(!message.equals(""))
         {

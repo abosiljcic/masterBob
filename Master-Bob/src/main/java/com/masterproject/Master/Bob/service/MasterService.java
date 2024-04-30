@@ -6,9 +6,12 @@ import com.masterproject.Master.Bob.model.User;
 import com.masterproject.Master.Bob.repository.ServiceRequestRepository;
 import com.masterproject.Master.Bob.repository.UserRepository;
 import com.masterproject.Master.Bob.utility.DateTimeConverter;
+import com.masterproject.Master.Bob.utility.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -38,24 +41,45 @@ public class MasterService {
 
     public ServiceRequest getServiceRequestById(Integer serviceRequestId)
     {
-        return serviceRequestRepository.findById(serviceRequestId).get();
+        Optional<ServiceRequest> serviceRequestOpt = serviceRequestRepository.findById(serviceRequestId);
+        ServiceRequest serviceRequest = serviceRequestOpt.orElseThrow(() -> new NotFoundException("Service request not found with ID: " + serviceRequestId));
+
+        if(serviceRequestOpt.isPresent())
+        {
+            serviceRequest.setDateTimeBeginString(serviceRequest.getDateTimeBegin().toString());
+            serviceRequest.setDateTimeEndString(serviceRequest.getDateTimeEnd().toString());
+        }
+
+        return  serviceRequest;
+
     }
 
-    public String editServiceRequest (Integer masterId,String additionalInfo, ServiceStatus status, String dateTimeBeginString, String dateTimeEndString, Integer serviceRequestId)
+    public String editServiceRequest (ServiceRequest serviceRequest)
     {
         // Konverzija vremena u Timestamp
         DateTimeConverter dateTimeConverter = new DateTimeConverter();
-        Timestamp dateTimeBegin = dateTimeConverter.convertToTimestamp(dateTimeBeginString);
-        Timestamp dateTimeEnd = dateTimeConverter.convertToTimestamp(dateTimeEndString);
+        Timestamp dateTimeBegin = dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString());
+        Timestamp dateTimeEnd = dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeEndString());
 
         // Provera da li je master dostupan u tom periodu
-        if(!checkMastersAvailaility(masterId,dateTimeBegin,dateTimeEnd))
+        if(!checkMastersAvailaility(serviceRequest.getMaster().getId(),dateTimeBegin,dateTimeEnd))
         {
             return "You are not available during that period!";
         }
 
         // Edit-ovanje
-        serviceRequestRepository.editServiceRequest(additionalInfo, status, dateTimeBegin, dateTimeEnd, serviceRequestId);
+        serviceRequestRepository.editServiceRequest(serviceRequest.getAdditionalInfo(), serviceRequest.getServiceStatus(), dateTimeBegin, dateTimeEnd, serviceRequest.getId());
+
+        // Salje se mejl obavestenja customer-u da je service request koji je kreirao promenjen
+        Email email = new Email();
+        String text = "Dear " + serviceRequest.getCustomer().getName() + " " + serviceRequest.getCustomer().getSurname() +
+                ", The service request " + serviceRequest.getId() + " you created has been changed. Please check your account, Master Bob Team";
+        try {
+            email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","Edited service request " + serviceRequest.getId(),text,"");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Something went wrong while sending the email.";
+        }
 
         return "";
     }

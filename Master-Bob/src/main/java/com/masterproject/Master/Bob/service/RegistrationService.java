@@ -32,23 +32,6 @@ public class RegistrationService {
     @Autowired
     private JobCategoryRepository jobCategoryRepository;
 
-
-
-  /*  @Bean
-    public RestTemplate restTemplate ()
-    {
-        return new RestTemplate();
-    }*/
-
-    /*@Autowired
-    private JavaMailSender mailSender;*/
-
-   /* @Bean
-    public JavaMailSender mailSender ()
-    {
-        return new JavaMailSenderImpl();
-    }*/
-
     public boolean checkUsername(String email) {
         return userRepository.findByUsername(email).isPresent();
     }
@@ -104,57 +87,5 @@ public class RegistrationService {
         }
 
     }
-
-  /*  private String callNominatimAPI(String address)
-    {
-        String url = "https://nominatim.openstreetmap.org/search?q=" + address + "&format=json&addressdetails=1&countrycodes=RS";
-        ResponseEntity<String> response = restTemplate().getForEntity(url, String.class);
-        return response.getBody();
-    }
-
-    public double[][] parseJson (String json) throws IOException
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(json);
-
-        double[][] coordinates = new double[rootNode.size()][2];
-        for (int i = 0; i < rootNode.size(); i++) {
-            JsonNode node = rootNode.get(i);
-            coordinates[i][0] = node.get("lat").asDouble();
-            coordinates[i][1] = node.get("lon").asDouble();
-        }
-
-        return coordinates;
-    }*/
-
-  /*  public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String fromAddress = "anabos123@gmail.com";
-        String senderName = "Master Bob";
-        String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Master Bob Team.";
-
-        MimeMessage message = mailSender().createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(new InternetAddress(fromAddress));
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender().send(message);
-
-    }*/
-
 
 }

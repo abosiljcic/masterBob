@@ -47,6 +47,22 @@
                   type="hidden"
           />
 
+          <input
+                  class="form-control"
+                  id="customerName"
+                  name="customerName"
+                  th:field="${serviceRequest.customer.name}"
+                  type="hidden"
+          />
+
+          <input
+                  class="form-control"
+                  id="customerSurname"
+                  name="customerSurname"
+                  th:field="${serviceRequest.customer.surname}"
+                  type="hidden"
+          />
+
           <div class="form-group mb-3">
             <label class="form-label" for="additionalInfo">Additional info</label>
             <input
