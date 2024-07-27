@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>Master Bob - Job description</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+         .job-container {
+            position: relative;
+            width: 100%; /* Full width */
+        }
+
+        .job-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #ffcc00;
+            font-weight: bold;
+            padding: 20px;
+            font-size: 3.2em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .find-master-button {
+            position: absolute;
+            top: calc(100% - 25px);
+            left: 50%;
+            transform: translate(-50%, 0);
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 40%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .find-master-button:hover {
+            background-color: #ff9900;
+        }
+
+        .job-description-text {
+            margin: 60px auto 0;
+            font-size: 1.2em;
+            padding: 10px;
+            max-width: 90%;
+            text-align: left;
+        }
+
+        .job-description {
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="job-container">
+    <a th:href="@{'/job/' + ${job.id}}" >
+      <img th:src="${job.imageUrl}" alt="" class="job-image">
+      <div class="overlay-text" th:text="${job.name}"></div>
+        <button class="find-master-button">Find a master</button>
+    </a>
+
+</div>
+<div id="1" class="job-description job-description-text">
+    <div th:replace="~{fragments/electricalInstallationsDescription :: electricalInstallationsDescription}"></div>
+</div>
+
+<div id="2" class="job-description job-description-text">
+    <div th:replace="~{fragments/electricalEmergencyService :: electricalEmergencyService}"></div>
+</div>
+
+<div id="3" class="job-description job-description-text">
+    <div th:replace="~{fragments/connectingHouseholdAppliances :: connectingHouseholdAppliances}"></div>
+</div>
+
+<div id="8" class="job-description job-description-text">
+    <div th:replace="~{fragments/otherElectricalServices :: otherElectricalServices}"></div>
+</div>
+
+<div id="9" class="job-description job-description-text">
+    <div th:replace="~{fragments/tiling :: tiling}"></div>
+</div>
+
+<div id="10" class="job-description job-description-text">
+    <div th:replace="~{fragments/houseElevation :: houseElevation}"></div>
+</div>
+
+<div id="11" class="job-description job-description-text">
+    <div th:replace="~{fragments/houseConstruction :: houseConstruction}"></div>
+</div>
+
+<div id="12" class="job-description job-description-text">
+    <div th:replace="~{fragments/stackingPanels :: stackingPanels}"></div>
+</div>
+
+<div id="13" class="job-description job-description-text">
+    <div th:replace="~{fragments/plumbingEmergencyService :: plumbingEmergencyService}"></div>
+</div>
+
+<div id="14" class="job-description job-description-text">
+    <div th:replace="~{fragments/otherPlumbingServices :: otherPlumbingServices}"></div>
+</div>
+
+<div id="15" class="job-description job-description-text">
+    <div th:replace="~{fragments/whiteAssembly :: whiteAssembly}"></div>
+</div>
+
+<div id="16" class="job-description job-description-text">
+    <div th:replace="~{fragments/waterInstallation :: waterInstallation}"></div>
+</div>
+
+<div id="17" class="job-description job-description-text">
+    <div th:replace="~{fragments/furnitureAssembly :: furnitureAssembly}"></div>
+</div>
+
+<div id="18" class="job-description job-description-text">
+    <div th:replace="~{fragments/smallFixes :: smallFixes}"></div>
+</div>
+
+<div id="19" class="job-description job-description-text">
+    <div th:replace="~{fragments/repairOfHouseholdAppliances :: repairOfHouseholdAppliances}"></div>
+</div>
+
+<div id="20" class="job-description job-description-text">
+    <div th:replace="~{fragments/drywallRepair :: drywallRepair}"></div>
+</div>
+
+<div id="21" class="job-description job-description-text">
+    <div th:replace="~{fragments/paintingWalls :: paintingWalls}"></div>
+</div>
+
+<div id="22" class="job-description job-description-text">
+    <div th:replace="~{fragments/paintingCeiling :: paintingCeiling}"></div>
+</div>
+
+<div id="23" class="job-description job-description-text">
+    <div th:replace="~{fragments/wallpapering :: wallpapering}"></div>
+</div>
+
+<div id="24" class="job-description job-description-text">
+    <div th:replace="~{fragments/roofPainting :: roofPainting}"></div>
+</div>
+
+<div id="25" class="job-description job-description-text">
+    <div th:replace="~{fragments/houseRenovation :: houseRenovation}"></div>
+</div>
+
+<div id="26" class="job-description job-description-text">
+    <div th:replace="~{fragments/removals :: removals}"></div>
+</div>
+
+<div id="27" class="job-description job-description-text">
+    <div th:replace="~{fragments/apartmentRenovation :: apartmentRenovation}"></div>
+</div>
+
+<div id="28" class="job-description job-description-text">
+    <div th:replace="~{fragments/sandingParquetFlooring :: sandingParquetFlooring}"></div>
+</div>
+
+<div id="29" class="job-description job-description-text">
+    <div th:replace="~{fragments/carElectrician :: carElectrician}"></div>
+</div>
+
+<div id="30" class="job-description job-description-text">
+    <div th:replace="~{fragments/carMechanic :: carMechanic}"></div>
+</div>
+
+<div id="31" class="job-description job-description-text">
+    <div th:replace="~{fragments/tiresSwap :: tiresSwap}"></div>
+</div>
+
+<div id="32" class="job-description job-description-text">
+    <div th:replace="~{fragments/carInspection :: carInspection}"></div>
+</div>
+
+<script>
+  const jobId = [[${jobId}]];
+
+    console.log('Job ID:', jobId);
+
+    const descriptions = document.querySelectorAll('.job-description');
+    descriptions.forEach(function(desc) {
+        desc.style.display = 'none';
+    });
+
+    if (jobId) {
+        const jobDescription = document.getElementById(jobId);
+        if (jobDescription) {
+            jobDescription.style.display = 'block';
+        } else {
+            console.log('No matching job description found for:', jobId);
+        }
+    } else {
+        console.log('No jobId parameter found in the page.');
+    }
+</script>
+
+
+</body>
+</html>

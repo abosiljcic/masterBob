@@ -35,6 +35,22 @@ public class CustomerController {
         return "category";
     }
 
+    @GetMapping("/job-description/{id}")
+    public String getJobDescription(@PathVariable("id") Integer id, Model model)
+    {
+        Optional<Job> job = customerService.getJobById(id);
+        if(job.isEmpty())
+        {
+            model.addAttribute("errorMessage","Job is not recognized!");
+            return "errorPage";
+        }
+
+        model.addAttribute("job",job.get());
+        model.addAttribute("jobId", id); // used in js code
+
+        return "jobDescription";
+    }
+
     @GetMapping("/job/{id}")
     public String getJob (@PathVariable("id") Integer id, Model model)
     {
@@ -53,7 +69,7 @@ public class CustomerController {
         return "requestService";
     }
 
-    @PostMapping("/service_request")
+    @PostMapping("/service-request")
     public String saveServiceRequest (@ModelAttribute ServiceRequest serviceRequest, @RequestParam("jobId") Integer id, Model model) throws IOException
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

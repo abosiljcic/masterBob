@@ -49,7 +49,7 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/register", "/login").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/category/**", "/job-description/**").permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/customer/**").hasRole("customer")
                          .requestMatchers("/master/**").hasRole("master")

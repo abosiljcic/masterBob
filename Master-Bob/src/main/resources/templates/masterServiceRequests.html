@@ -10,6 +10,7 @@
 </head>
 <body>
 
+<div th:fragment="masterServiceRequests">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div>
@@ -50,12 +51,12 @@
             <td th:text="${serviceRequest.dateTimeBegin}">Date begin</td>
             <td th:text="${serviceRequest.dateTimeEnd}">Date end</td>
             <td style="text-align: center;">
-                <a class="btn btn-info btn-sm" th:href="@{'/service_request/edit/' + ${serviceRequest.id}}">
+                <a class="btn btn-info btn-sm" th:href="@{'/service-request/edit/' + ${serviceRequest.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
             </td>
             <td style="text-align: center;">
-                <a th:href="@{'/service_request/delete/' + ${serviceRequest.id}}">
+                <a th:href="@{'/service-request/delete/' + ${serviceRequest.id}}">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
             </td>
@@ -64,6 +65,6 @@
     </table>
 
 </div>
-
+</div>
 </body>
 </html>

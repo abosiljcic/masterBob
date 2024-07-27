@@ -19,8 +19,7 @@ public class MasterController {
     @Autowired
     MasterService masterService;
 
-
-    @GetMapping("/service_request")
+    @GetMapping("/service-request")
     public String getMasterServiceRequests (Model model)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,7 +36,7 @@ public class MasterController {
         return "masterServiceRequests";
     }
 
-    @RequestMapping("/service_request/delete/{id}")
+    @RequestMapping("/service-request/delete/{id}")
     public String deleteServiceRequest(@PathVariable(name = "id") Integer serviceRequestId, Model model) {
         masterService.deleteServiceRequestById(serviceRequestId);
         model.addAttribute("message","Successfully deleted service request!");
@@ -45,7 +44,7 @@ public class MasterController {
         return getMasterServiceRequests(model);
     }
 
-    @RequestMapping("/service_request/edit/{id}")
+    @RequestMapping("/service-request/edit/{id}")
     public String editServiceRequest (@PathVariable(name = "id") Integer serviceRequestId, Model model)
     {
         ServiceRequest serviceRequest = masterService.getServiceRequestById(serviceRequestId);
@@ -55,7 +54,7 @@ public class MasterController {
 
         return "editServiceRequest";
     }
-    @PostMapping("/service_request/save/edit/{id}")
+    @PostMapping("/service-request/save/edit/{id}")
     public String saveEditedServiceRequest (@ModelAttribute ServiceRequest serviceRequest, Model model)
     {
         String message = masterService.editServiceRequest(serviceRequest);

@@ -6,54 +6,66 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
 
-        .flex-container {
-            display: flex;
-            flex-wrap: wrap; /* Wrap items to new row */
-            gap: 20px; /* Gap between flex items */
-        }
+      .flex-container {
+    display: flex;
+    flex-wrap: wrap; /* Wrap items to new row */
+    gap: 20px; /* Gap between flex items */
+    justify-content: center; /* Center the items horizontally */
+}
 
-        .flex-item {
-            flex: 1 0 calc(50% - 10px); /* Two items per row, with gap */
-            position: relative; /* Position relative for overlay text */
-            text-align: center; /* Center-align text */
-            margin-bottom: 20px; /* Bottom margin for spacing */
-        }
+.flex-item {
+    flex: 1 0 calc(50% - 10px); /* Two items per row, with gap */
+    position: relative; /* Position relative for overlay text */
+    text-align: center; /* Center-align text */
+    margin-bottom: 20px; /* Bottom margin for spacing */
+}
 
-        .job-image {
-            width: 40%; /* Full width */
-            height: auto; /* Auto height */
-        }
+.job-image {
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+    max-width: 300px; /* Limit max width */
+}
 
-        .overlay-text {
-            position: absolute;
-            bottom: 0; /* Align text to bottom */
-            right: 0; /* Align text to left */
-            left: 0;
-            text-align: center;
-            width: 40%; /* Full width */
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            color: yellow; /* Text color */
-            font-weight: bold; /* Bold font weight */
-            padding: 10px; /* Padding for text */
-            box-sizing: border-box; /* Include padding in width */
-        }
-        .category {
-            display: flex;
-            align-items: center;
-            margin-bottom: 70px;
-            width: 30%;
-            text-align: center;
-        }
+.overlay-text {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust to center exactly */
+    text-align: center;
+    color: #ffcc00; /* Text color */
+    font-weight: bold; /* Bold font weight */
+    font-size: 1.5em;
+    padding: 10px; /* Padding for text */
+    box-sizing: border-box; /* Include padding in width */
+    width: 100%; /* Full width of the image */
+    height: auto; /* Auto height to fit content */
+}
 
-        .column{
-          align-items: center;
-          text-align: center;
-        }
 
-        .category-icon {
-            margin-right: 10px;
-            margin-left: 125px;
-        }
+            .column {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 95px;
+    text-align: center; /* Center text within the container */
+}
+
+/* Category styling */
+.category {
+    display: flex;
+    align-items: center; /* Align icon and text vertically */
+    gap: 15px; /* Space between the icon and text */
+    margin-bottom: 20px; /* Space below the category */
+}
+
+/* Styling for category icon */
+.category-icon {
+    width: 50px; /* Set fixed width */
+    height: 50px; /* Set fixed height */
+}
+
+
+
     </style>
 </head>
 <body>
@@ -73,12 +85,12 @@
 
 <div class="flex-container">
   <div th:each="job, iterStat : ${jobs}" class="flex-item">
-    <a th:href="@{'/job/' + ${job.id}}" >
+    <a th:href="@{'/job-description/' + ${job.id}}" >
     <img th:src="${job.imageUrl}" alt="" class="job-image">
     <div class="overlay-text" th:text="${job.name}"></div>
     </a>
-
   </div>
+
 </div>
 
 </body>
