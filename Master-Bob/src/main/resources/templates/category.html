@@ -13,34 +13,50 @@
     justify-content: center; /* Center the items horizontally */
 }
 
+.flex-item a {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit color from parent element or set specific color */
+}
+
+.flex-item a:hover {
+    text-decoration: none; /* Remove underline on hover */
+    color: inherit; /* Ensure color remains unchanged on hover */
+}
+
+/* Hover effect */
+.flex-item:hover .job-image {
+    transform: scale(1.1); /* Zoom image */
+}
+
+.flex-item:hover .overlay-text {
+    transform: scale(1.1); /* Zoom text */
+}
+
 .flex-item {
     flex: 1 0 calc(50% - 10px); /* Two items per row, with gap */
     position: relative; /* Position relative for overlay text */
     text-align: center; /* Center-align text */
     margin-bottom: 20px; /* Bottom margin for spacing */
+    transition: transform 0.3s ease; /* Smooth scaling effect */
 }
 
 .job-image {
     width: 100%; /* Full width */
     height: auto; /* Auto height */
     max-width: 300px; /* Limit max width */
+    transition: transform 0.3s ease; /* Smooth scaling effect */
 }
 
 .overlay-text {
-    position: absolute;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust to center exactly */
-    text-align: center;
-    color: #ffcc00; /* Text color */
-    font-weight: bold; /* Bold font weight */
-    font-size: 1.5em;
-    padding: 10px; /* Padding for text */
-    box-sizing: border-box; /* Include padding in width */
-    width: 100%; /* Full width of the image */
-    height: auto; /* Auto height to fit content */
-}
-
+          margin-top: 10px; /* Space between image and text */
+          text-align: center;
+          color: #ffcc00; /* Text color */
+          font-weight: bold; /* Bold font weight */
+          font-size: 1.5em;
+          padding: 10px; /* Padding for text */
+          box-sizing: border-box; /* Include padding in width */
+          transition: transform 0.3s ease; /* Smooth scaling effect */
+      }
 
             .column {
     display: flex;
