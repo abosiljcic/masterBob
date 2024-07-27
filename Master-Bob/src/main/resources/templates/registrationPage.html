@@ -9,6 +9,11 @@
             display: flex;
             justify-content: space-between;
         }
+
+        .custom-btn {
+          background-color: #ffcc00;
+          font-weight: bold;
+        }
   </style>
 </head>
 <body>
@@ -162,9 +167,9 @@
 
 
           <div class="form-group-button">
-            <button class="btn btn-primary" type="submit">Register</button>
+            <button class="btn custom-btn" type="submit">Register</button>
             <span>Already registered?
-            <button type="button" class="btn btn-primary" th:onclick="|window.location.href='/login'|">
+            <button type="button" class="btn custom-btn" th:onclick="|window.location.href='/login'|">
                   Login
             </button>
               </span>
