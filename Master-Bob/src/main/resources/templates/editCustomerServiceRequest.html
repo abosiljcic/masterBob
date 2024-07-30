@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <title>Master Bob - Edit service request</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/all.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+  <style>
+        .container {
+            display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+        }
+.custom-btn, .div-header {
+          background-color: #ffcc00;
+          font-weight: bold;
+        }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px;
+            width: auto; /* Maintain aspect ratio */
+        }
+
+        .search {
+            margin-right: 50px;
+        }
+
+        .main-div {
+            margin-left: 700px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
+        }
+
+        #error-message {
+      color: red;
+      display: none;
+    }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+  <div class="row col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-header div-header">
+        <h2 class="text-center" style="font-weight: bold;">Edit service request</h2>
+      </div>
+
+      <div th:if="${errorMessage != null}" class="alert alert-danger">
+        [[${errorMessage}]]
+      </div>
+
+      <div class="card-body">
+        <form
+                id="service-form"
+                method="post"
+                role="form"
+                th:action="@{'/user/customer/service-request/save/edit/' + ${serviceRequest.id}}"
+                th:object="${serviceRequest}"
+        >
+          <input
+                  class="form-control"
+                  id="masterId"
+                  name="masterId"
+                  th:field="${serviceRequest.master.id}"
+                  type="hidden"
+          />
+
+          <input
+                  class="form-control"
+                  id="jobId"
+                  name="jobId"
+                  th:field="${serviceRequest.job.id}"
+                  type="hidden"
+          />
+
+          <input
+                  class="form-control"
+                  id="masterName"
+                  name="masterName"
+                  th:field="${serviceRequest.master.name}"
+                  type="hidden"
+          />
+
+          <input
+                  class="form-control"
+                  id="masterSurname"
+                  name="masterSurname"
+                  th:field="${serviceRequest.master.surname}"
+                  type="hidden"
+          />
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="additionalInfo">Additional info</label>
+            <textarea class="form-control" id="additionalInfo" name="additionalInfo" th:field="*{additionalInfo}"></textarea><br>
+            <p th:errors = "*{additionalInfo}" class="text-danger"
+               th:if="${#fields.hasErrors('additionalInfo')}"></p>
+          </div>
+
+          <input
+                  class="form-control"
+                  id="serviceStatus"
+                  name="serviceStatus"
+                  th:field="${serviceRequest.serviceStatus}"
+                  type="hidden"
+          />
+
+          <div class="form-group mb-3">
+            <label class="form-label" for="dateTimeBegin">Date begin</label>
+            <input
+                    class="form-control"
+                    id="dateTimeBegin"
+                    name="dateTimeBegin"
+                    th:field="*{dateTimeBeginString}"
+                    type="datetime-local"
+                    required
+            />
+            <p th:errors="*{dateTimeBeginString}" class="text-danger"
+               th:if="${#fields.hasErrors('dateTimeBeginString')}"></p>
+            <p id="error-message">Please choose a time between 8:00 AM and 9:00 PM.</p>
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+                    class="form-control"
+                    id="dateTimeEnd"
+                    name="dateTimeEnd"
+                    th:field="*{dateTimeEndString}"
+                    type="hidden"
+            />
+            <p th:errors="*{dateTimeEndString}" class="text-danger"
+               th:if="${#fields.hasErrors('dateTimeEndString')}"></p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    th:onclick="|window.location.href='/user/customer/service-request'|">Close
+            </button>
+            <button type="submit" class="btn custom-btn">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+ document.addEventListener('DOMContentLoaded', function () {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to midnight for minDate
+
+      var initialDateTimeBegin = document.getElementById('dateTimeBegin').value;
+
+      flatpickr("#dateTimeBegin", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        defaultDate: initialDateTimeBegin || new Date(), // Set default date to today
+        minDate: today, // Set minimum selectable date to today
+        onChange: function(selectedDates, dateStr, instance) {
+          var errorMessage = document.getElementById('error-message');
+          if (selectedDates.length === 0) {
+            return;
+          }
+          var selectedDate = selectedDates[0];
+          var selectedHours = selectedDate.getHours();
+          var selectedMinutes = selectedDate.getMinutes();
+          var selectedTime = selectedHours + selectedMinutes / 60;
+
+          // Check if the selected time is between 8:00 AM and 9:00 PM (21:00)
+          if (selectedTime < 8 || selectedTime > 21) {
+            errorMessage.style.display = 'block';
+          } else {
+            errorMessage.style.display = 'none';
+          }
+        }
+      });
+
+      document.getElementById('service-form').addEventListener('submit', function(event) {
+        var input = document.getElementById('dateTimeBegin');
+        var selectedDate = new Date(input.value);
+        var selectedHours = selectedDate.getHours();
+        var selectedMinutes = selectedDate.getMinutes();
+        var selectedTime = selectedHours + selectedMinutes / 60;
+
+        if (selectedTime < 8 || selectedTime > 21) {
+          event.preventDefault(); // Prevent form submission
+          document.getElementById('error-message').style.display = 'block';
+        } else {
+          // Format the date to the required format
+          var formattedDate = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss.SSS');
+          input.value = formattedDate; // Set the formatted date back to the input
+          console.log('Formatted Date:', formattedDate); // For debugging
+        }
+      });
+    });
+
+</script>
+
+</body>
+</html>

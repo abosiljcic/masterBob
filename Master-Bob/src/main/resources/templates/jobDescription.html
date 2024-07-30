@@ -111,7 +111,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="job-container">
-    <a th:href="@{'/job/' + ${job.id}}" >
+    <a th:href="@{'/user/customer/job/' + ${job.id}}" >
       <img th:src="${job.imageUrl}" alt="" class="job-image">
       <div class="overlay-text" th:text="${job.name}"></div>
         <div class="button-wrapper">

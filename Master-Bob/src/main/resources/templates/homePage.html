@@ -78,21 +78,21 @@
     <div class="column">
         <div th:each="category, iterStat : ${jobCategories}" th:if="${iterStat.index % 3 == 0}" class="category">
             <img class="category-icon" th:src="${category.iconUrl}" alt="" width="50" height="50">
-            <h3><a th:href="@{'/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
+            <h3><a th:href="@{'/user/customer/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
         </div>
     </div>
 
     <div class="column">
         <div th:each="category, iterStat : ${jobCategories}" th:if="${iterStat.index % 3 == 1}" class="category">
             <img class="category-icon" th:src="${category.iconUrl}" alt="" width="50" height="50">
-            <h3><a th:href="@{'/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
+            <h3><a th:href="@{'/user/customer/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
         </div>
     </div>
 
     <div class="column">
         <div th:each="category, iterStat : ${jobCategories}" th:if="${iterStat.index % 3 == 2}" class="category">
             <img class="category-icon" th:src="${category.iconUrl}" alt="" width="50" height="50">
-            <h3><a th:href="@{'/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
+            <h3><a th:href="@{'/user/customer/category/' + ${category.id}}" class="category-link" th:text="${category.category}"></a></h3>
         </div>
     </div>
 </div>

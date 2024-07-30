@@ -11,9 +11,11 @@ import com.masterproject.Master.Bob.utility.DateTimeConverter;
 import com.masterproject.Master.Bob.utility.Email;
 import com.masterproject.Master.Bob.utility.NominatimAPI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,17 @@ public class CustomerService {
         return userRepository.findByUsername(username);
     }
 
+    private Timestamp calculateDateTimeEnd (Optional<Job> job, ServiceRequest serviceRequest)
+    {
+        // Konverzija dateTimeBegin u Timestamp, odredjivanje dateTimeEnd
+        Integer duration = job.get().getDuration() * 60 * 1000; // duration in milisec
+        DateTimeConverter dateTimeConverter = new DateTimeConverter();
+        serviceRequest.setDateTimeBegin(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString()));
+        long dateTimeEnd = serviceRequest.getDateTimeBegin().getTime() + duration;
+
+        return new Timestamp(dateTimeEnd);
+    }
+
     public String saveServiceRequest (ServiceRequest serviceRequest) throws IOException
     {
         Optional<Job> job = getJobById(serviceRequest.getJob().getId());
@@ -56,13 +69,7 @@ public class CustomerService {
 
         JobCategory jobCategory = job.get().getCategory();
 
-        // Konverzija dateTimeBegin u Timestamp, odredjivanje dateTimeEnd
-        Integer duration = job.get().getDuration() * 60 * 1000; // duration in milisec
-        DateTimeConverter dateTimeConverter = new DateTimeConverter();
-        serviceRequest.setDateTimeBegin(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString()));
-        long dateTimeEnd = serviceRequest.getDateTimeBegin().getTime() + duration;
-        Timestamp newDateTimeEnd = new Timestamp(dateTimeEnd);
-        serviceRequest.setDateTimeEnd(newDateTimeEnd);
+        serviceRequest.setDateTimeEnd(calculateDateTimeEnd(job, serviceRequest));
 
         String message = null;
         // Ako nema registrovanih master-a za izabranu kategoriju, vrati odgovarajucu poruku
@@ -168,5 +175,87 @@ public class CustomerService {
             e.printStackTrace();
         }
     }
+
+    public List<ServiceRequest> getAllCustomerServiceRequests (Integer customerId)
+    {
+        return serviceRequestRepository.findAllCustomerServiceRequests(customerId);
+    }
+
+    public void deleteServiceRequestById (Integer serviceRequestId)
+    {
+        serviceRequestRepository.deleteById(serviceRequestId);
+    }
+
+    public ServiceRequest getServiceRequestById(Integer serviceRequestId)
+    {
+        Optional<ServiceRequest> serviceRequestOpt = serviceRequestRepository.findById(serviceRequestId);
+        ServiceRequest serviceRequest = serviceRequestOpt.orElseThrow(() -> new NotFoundException("Service request not found with ID: " + serviceRequestId));
+
+        if(serviceRequestOpt.isPresent())
+        {
+            if (serviceRequest.getDateTimeBegin() == null)
+            {
+                serviceRequest.setDateTimeBeginString("");
+            }
+            else
+            {
+                serviceRequest.setDateTimeBeginString(serviceRequest.getDateTimeBegin().toString());
+            }
+
+            if (serviceRequest.getDateTimeEnd() == null)
+            {
+                serviceRequest.setDateTimeEndString("");
+            }
+            else
+            {
+                serviceRequest.setDateTimeEndString(serviceRequest.getDateTimeEnd().toString());
+            }
+        }
+
+        return  serviceRequest;
+    }
+
+    public String editServiceRequest (ServiceRequest serviceRequest)
+    {
+        // Konverzija vremena u Timestamp
+        DateTimeConverter dateTimeConverter = new DateTimeConverter();
+        Timestamp dateTimeBegin = dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString());
+        // if user change dateTimeBegin calculate new dateTimeEnd and check master`s availability
+        Optional<Job> job = getJobById(serviceRequest.getJob().getId());
+        if(job.isEmpty())
+        {
+            throw new IllegalStateException("Job is empty, cannot proceed.");
+        }
+        Timestamp dateTimeEnd = calculateDateTimeEnd(job, serviceRequest);
+        //Timestamp dateTimeEnd = dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeEndString());
+
+        // Provera da li je master dostupan u tom periodu
+        if(!checkMastersAvailability(serviceRequest.getMaster().getId(),dateTimeBegin,dateTimeEnd, serviceRequest.getId()))
+        {
+            return "Master is not available during that period!";
+        }
+
+        // Edit-ovanje
+        serviceRequestRepository.editServiceRequest(serviceRequest.getAdditionalInfo(), serviceRequest.getServiceStatus(), dateTimeBegin, dateTimeEnd, serviceRequest.getId());
+
+        // Salje se mejl obavestenja master-u da je service request za koji je zaduzen promenjen
+        Email email = new Email();
+        String text = "Dear " + serviceRequest.getMaster().getName() + " " + serviceRequest.getMaster().getSurname() +
+                ", The service request " + serviceRequest.getId() + " you are responsible for has been changed. Please check your account. Best regards, Master Bob Team";
+        try {
+            email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","Edited service request " + serviceRequest.getId(),text,"");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Something went wrong while sending the email.";
+        }
+
+        return "";
+    }
+
+    private boolean checkMastersAvailability (Integer masterId, Timestamp dateTimeBegin, Timestamp dateTimeEnd, Integer serviceRequestId)
+    {
+        return serviceRequestRepository.getAvailableMasters(masterId, dateTimeBegin, dateTimeEnd, serviceRequestId);
+    }
+
 
 }

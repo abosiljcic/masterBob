@@ -36,6 +36,14 @@
         .jobs-btn {
             margin-right: 20px;
         }
+
+       .disabled-icon {
+    opacity: 0.5; /* Makes it look disabled */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+    pointer-events: none; /* Prevents clicks */
+    text-decoration: none; /* Removes underline */
+}
+
   </style>
 
 </head>
@@ -58,9 +66,9 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-dark" style="background-color: #ffcc00;">
         <tr>
-            <th style="text-align: center;">Customer name</th>
-            <th style="text-align: center;">Customer surname</th>
-            <th style="text-align: center;">Customer address</th>
+            <th style="text-align: center;">Customer`s name</th>
+            <th style="text-align: center;">Customer`s surname</th>
+            <th style="text-align: center;">Customer`s address</th>
             <th style="text-align: center;">Additional info</th>
             <th style="text-align: center;">Job</th>
             <th style="text-align: center;">Service status</th>
@@ -72,21 +80,25 @@
         </thead>
         <tbody id="serviceRequestsTableBody">
         <tr th:each="serviceRequest : ${serviceRequestList}">
-            <td th:text="${serviceRequest.customer.name}">>Customer name</td>
-            <td th:text="${serviceRequest.customer.surname}">Customer surname</td>
-            <td th:text="${serviceRequest.customerAddress}">Customer address</td>
+            <td th:text="${serviceRequest.customer.name}">Customer`s name</td>
+            <td th:text="${serviceRequest.customer.surname}">Customer`s surname</td>
+            <td th:text="${serviceRequest.customerAddress}">Customer`s address</td>
             <td th:text="${serviceRequest.additionalInfo}">Additional info</td>
             <td th:text="${serviceRequest.job.name}">Job</td>
             <td th:text="${serviceRequest.serviceStatus}">Service status</td>
             <td th:text="${serviceRequest.dateTimeBegin}">Date begin</td>
             <td th:text="${serviceRequest.dateTimeEnd}">Date end</td>
             <td style="text-align: center;">
-                <a class="btn custom-btn" th:href="@{'/service-request/edit/' + ${serviceRequest.id}}">
+                <a class="btn custom-btn"
+                   th:classappend="${serviceRequest.serviceStatus == T(com.masterproject.Master.Bob.model.ServiceStatus).FINISHED ? ' disabled-icon' : ''}"
+                   th:href="@{'/user/master/service-request/edit/' + ${serviceRequest.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
             </td>
             <td style="text-align: center;">
-                <a class="btn custom-btn" th:href="@{'/service-request/delete/' + ${serviceRequest.id}}">
+                <a class="btn custom-btn"
+                   th:classappend="${serviceRequest.serviceStatus == T(com.masterproject.Master.Bob.model.ServiceStatus).FINISHED ? ' disabled-icon' : ''}"
+                   th:href="@{'/user/master/service-request/delete/' + ${serviceRequest.id}}">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
             </td>

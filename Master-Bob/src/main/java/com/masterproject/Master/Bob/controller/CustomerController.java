@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/user/customer")
 public class CustomerController {
     @Autowired
     CustomerService customerService;
@@ -113,6 +114,58 @@ public class CustomerController {
 
         /* Videti jos sta ovde vracati */
         return getCategory(categoryId,model);
+    }
+
+    @GetMapping("/service-request")
+    public String getCustomerServiceRequests (Model model)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> customer = customerService.getUserByUsername(username);
+        if (customer.isEmpty())
+        {
+            model.addAttribute("errorMessage", "Customer is not recognized!");
+        }
+
+        List<ServiceRequest> serviceRequestList = customerService.getAllCustomerServiceRequests(customer.get().getId());
+        model.addAttribute("serviceRequestList",serviceRequestList);
+
+        return "customerServiceRequests";
+    }
+
+    @RequestMapping("/service-request/delete/{id}")
+    public String deleteServiceRequest(@PathVariable(name = "id") Integer serviceRequestId, Model model) {
+        customerService.deleteServiceRequestById(serviceRequestId);
+        model.addAttribute("message","Successfully deleted service request!");
+
+        return getCustomerServiceRequests(model);
+    }
+
+    @RequestMapping("/service-request/edit/{id}")
+    public String editServiceRequest (@PathVariable(name = "id") Integer serviceRequestId, Model model)
+    {
+        ServiceRequest serviceRequest = customerService.getServiceRequestById(serviceRequestId);
+        model.addAttribute("serviceRequest", serviceRequest);
+
+        model.addAttribute("serviceStatuses", ServiceStatus.values());
+
+        return "editCustomerServiceRequest";
+    }
+
+    @PostMapping("/service-request/save/edit/{id}")
+    public String saveEditedServiceRequest (@ModelAttribute ServiceRequest serviceRequest, Model model)
+    {
+        String message = customerService.editServiceRequest(serviceRequest);
+
+        if(!message.equals(""))
+        {
+            model.addAttribute("errorMessage", message);
+            return editServiceRequest(serviceRequest.getId(), model);
+        }
+
+        model.addAttribute("message", "Successfully edited service request!");
+
+        return getCustomerServiceRequests(model);
     }
 
 }

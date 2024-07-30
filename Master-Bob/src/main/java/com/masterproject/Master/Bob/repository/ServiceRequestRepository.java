@@ -21,6 +21,9 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest,I
     @Query("SELECT sr FROM ServiceRequest sr WHERE sr.master.id = ?1")
     List<ServiceRequest> findAllMasterServiceRequests (Integer masterId);
 
+    @Query("SELECT sr FROM ServiceRequest sr WHERE sr.customer.id = ?1")
+    List<ServiceRequest> findAllCustomerServiceRequests (Integer customerId);
+
     @Transactional
     @Modifying
     @Query("UPDATE ServiceRequest sr SET sr.additionalInfo = :additionalInfo, sr.serviceStatus = :status, sr.dateTimeBegin = :dateTimeBegin, sr.dateTimeEnd = :dateTimeEnd WHERE sr.id = :serviceRequestId")

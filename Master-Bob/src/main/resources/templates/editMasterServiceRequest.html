@@ -82,7 +82,7 @@
                 id="service-form"
                 method="post"
                 role="form"
-                th:action="@{'/service-request/save/edit/' + ${serviceRequest.id}}"
+                th:action="@{'/user/master/service-request/save/edit/' + ${serviceRequest.id}}"
                 th:object="${serviceRequest}"
         >
           <input
@@ -111,14 +111,8 @@
 
           <div class="form-group mb-3">
             <label class="form-label" for="additionalInfo">Additional info</label>
-            <input
-                    class="form-control"
-                    id="additionalInfo"
-                    name="additionalInfo"
-                    th:field="*{additionalInfo}"
-                    type="text"
-            />
-            <p th:errors="*{additionalInfo}" class="text-danger"
+            <textarea class="form-control" id="additionalInfo" name="additionalInfo" th:field="*{additionalInfo}"></textarea><br>
+            <p th:errors = "*{additionalInfo}" class="text-danger"
                th:if="${#fields.hasErrors('additionalInfo')}"></p>
           </div>
 
@@ -170,7 +164,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    th:onclick="|window.location.href='/service-request'|">Close
+                    th:onclick="|window.location.href='/user/master/service-request'|">Close
             </button>
             <button type="submit" class="btn custom-btn">Save</button>
           </div>

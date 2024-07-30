@@ -132,7 +132,7 @@
 
 <div class="flex-container">
   <div th:each="job, iterStat : ${jobs}" class="flex-item">
-    <a th:href="@{'/job-description/' + ${job.id}}" >
+    <a th:href="@{'/user/customer/job-description/' + ${job.id}}" >
     <img th:src="${job.imageUrl}" alt="" class="job-image">
     <div class="overlay-text" th:text="${job.name}"></div>
     </a>

@@ -1,7 +1,6 @@
 package com.masterproject.Master.Bob.controller;
 
 import com.masterproject.Master.Bob.model.*;
-import com.masterproject.Master.Bob.service.CustomerService;
 import com.masterproject.Master.Bob.service.MasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/user/master")
 public class MasterController {
 
     @Autowired
@@ -52,7 +52,7 @@ public class MasterController {
 
         model.addAttribute("serviceStatuses", ServiceStatus.values());
 
-        return "editServiceRequest";
+        return "editMasterServiceRequest";
     }
     @PostMapping("/service-request/save/edit/{id}")
     public String saveEditedServiceRequest (@ModelAttribute ServiceRequest serviceRequest, Model model)
