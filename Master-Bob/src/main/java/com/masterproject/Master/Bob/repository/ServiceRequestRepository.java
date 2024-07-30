@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest,Integer> {
 
-    @Query("SELECT COUNT(sr) = 0 FROM ServiceRequest sr WHERE sr.master.id = ?1 and NOT (dateTimeBegin > ?3 or dateTimeEnd < ?2)")
-    boolean getAvailableMasters (Integer id, Timestamp dateTimeBegin, Timestamp dateTimeEnd);
+    @Query("SELECT COUNT(sr) = 0 FROM ServiceRequest sr WHERE sr.master.id = ?1 and NOT (dateTimeBegin > ?3 or dateTimeEnd < ?2) and NOT (id = ?4)")
+    boolean getAvailableMasters (Integer id, Timestamp dateTimeBegin, Timestamp dateTimeEnd, Integer serviceRequestId);
 
     @Query("SELECT COUNT(sr) = 0 FROM ServiceRequest sr WHERE sr.master.id = ?1")
     boolean findMasterById (Integer id);

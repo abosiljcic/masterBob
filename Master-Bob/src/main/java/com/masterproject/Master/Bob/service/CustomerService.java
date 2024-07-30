@@ -64,12 +64,19 @@ public class CustomerService {
         Timestamp newDateTimeEnd = new Timestamp(dateTimeEnd);
         serviceRequest.setDateTimeEnd(newDateTimeEnd);
 
+        String message = null;
+        // Ako nema registrovanih master-a za izabranu kategoriju, vrati odgovarajucu poruku
         Set<User> masters = jobCategory.getUsers();
+        if (masters.size() == 0)
+        {
+            message = "There are no registered masters for the selected category.";
+            return message;
+        }
 
         List<User> availableMasters = new ArrayList<>();
         for (User m : masters)
         {
-            if(serviceRequestRepository.findMasterById(m.getId()) || serviceRequestRepository.getAvailableMasters(m.getId(), serviceRequest.getDateTimeBegin(), serviceRequest.getDateTimeEnd()))
+            if(serviceRequestRepository.findMasterById(m.getId()) || serviceRequestRepository.getAvailableMasters(m.getId(), serviceRequest.getDateTimeBegin(), serviceRequest.getDateTimeEnd(), -2))
             {
                 availableMasters.add(m);
             }
@@ -77,7 +84,7 @@ public class CustomerService {
 
         // ukoliko nema dostupnih master-a, onda sve master-e koji rade u toj job kategoriji stavljam u dostupne
         // user-u se onda dodeljuje master koji mu je najblizi
-        String message = null;
+
         if (availableMasters.size() == 0)
         {
             availableMasters.addAll(masters);
@@ -95,7 +102,7 @@ public class CustomerService {
         // Salje se mejl obavestenja master-u da ima novi service request
         Email email = new Email();
         String text = "Dear " + theClosestMaster.getName() + " " + theClosestMaster.getSurname() +
-                ", You have new service request. Please check your account, Master Bob Team";
+                ", You have new service request. Please check your account. Best regards, Master Bob Team";
         email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","New service request",text,"");
 
         return message;

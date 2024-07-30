@@ -8,19 +8,25 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/all.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css">
 
   <style>
   .container {
-  display: flex;
+            display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Make container full height of the viewport */
-  }
+  height: 75vh;
+        }
 
   .content {
   flex: 1; /* Take remaining space */
@@ -37,10 +43,38 @@
   max-height: 100%;
   }
 
-        .custom-btn {
+        .custom-btn, .div-header {
           background-color: #ffcc00;
           font-weight: bold;
         }
+
+        .main-div {
+            margin-left: 700px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
+        }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px; /* Adjust image height */
+            width: auto; /* Maintain aspect ratio */
+        }
+
+        .search {
+            margin-right: 50px;
+        }
+
+        #error-message {
+      color: red;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -49,11 +83,11 @@
 
 <div class="container">
   <div class="card">
-    <div class="card-header">
-      <h2 class="text-center" th:text="'Service request for ' + ${job.name}"></h2>
+    <div class="card-header div-header">
+      <h2 class="text-center" style="font-weight: bold;" th:text="'Service request for ' + ${job.name}"></h2>
     </div>
   <div class="card-body">
-    <form th:action="@{/service-request}" method="post" th:object="${serviceRequest}">
+    <form id="service-form" th:action="@{/service-request}" method="post" th:object="${serviceRequest}">
       <input type="hidden" name="jobId" th:value="${job.id}">
       <div class="form-group mb-3">
         <label class="form-label" for="address">Address:</label>
@@ -86,8 +120,8 @@
       </div>
 
       <div class="form-group mb-3">
-        <label class="form-label" for="serviceDate">Service date (You can leave this field empty if you want to adapt to the contractor)</label>
-        <label class="form-label" for="serviceDate">Please choose a time between 8:00 AM and 9:00 PM.</label>
+        <label class="form-label" for="serviceDate">Service date</label>
+        <label class="form-label" for="serviceDate">(Please choose a time between 8:00 AM and 9:00 PM)</label>
         <input
                 class="form-control datetimepicker"
                 id="serviceDate"
@@ -95,9 +129,11 @@
                 placeholder="Enter service date"
                 th:field="*{dateTimeBeginString}"
                 type="datetime-local"
+                required
         />
         <p th:errors = "*{dateTimeBeginString}" class="text-danger"
            th:if="${#fields.hasErrors('dateTimeBeginString')}"></p>
+        <p id="error-message">Please choose a time between 8:00 AM and 9:00 PM.</p>
       </div>
 
       <div class="form-group mb-3">
@@ -117,22 +153,59 @@
 </div>
 
 <script>
-document.querySelector('form').addEventListener('submit', function(event) {
-    var input = document.getElementById('serviceDate');
-    var selectedDate = new Date(input.value);
-    var selectedTime = selectedDate.getHours() + selectedDate.getMinutes() / 60;
+// Set minimum date and time to now
+var now = new Date();
+var minDate = now.toISOString().slice(0, 16);
+document.getElementById("serviceDate").min = minDate;
 
-    // Check if the selected time is between 8:00 AM and 9:00 PM
-    if (selectedTime < 8 || selectedTime > 21) {
-      event.preventDefault(); // Prevent form submission
-      alert('Please choose a time between 8:00 AM and 9:00 PM.');
-    }
-  });
-  var now = new Date();
+ document.addEventListener('DOMContentLoaded', function () {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to midnight for minDate
 
-  var minDate = now.toISOString().slice(0, 16);
+      flatpickr("#serviceDate", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        defaultDate: new Date(), // Set default date to today
+        minDate: today, // Set minimum selectable date to today
+        onChange: function(selectedDates, dateStr, instance) {
+          var errorMessage = document.getElementById('error-message');
+          if (selectedDates.length === 0) {
+            return;
+          }
+          var selectedDate = selectedDates[0];
+          var selectedHours = selectedDate.getHours();
+          var selectedMinutes = selectedDate.getMinutes();
+          var selectedTime = selectedHours + selectedMinutes / 60;
 
-  document.getElementById("serviceDate").min = minDate;
+          // Check if the selected time is between 8:00 AM and 9:00 PM (21:00)
+          if (selectedTime < 8 || selectedTime >= 21) {
+            errorMessage.style.display = 'block';
+          } else {
+            errorMessage.style.display = 'none';
+          }
+        }
+      });
+
+      document.getElementById('service-form').addEventListener('submit', function(event) {
+        var input = document.getElementById('serviceDate');
+        var selectedDate = new Date(input.value);
+        var selectedHours = selectedDate.getHours();
+        var selectedMinutes = selectedDate.getMinutes();
+        var selectedTime = selectedHours + selectedMinutes / 60;
+
+        if (selectedTime < 8 || selectedTime > 21) {
+          event.preventDefault(); // Prevent form submission
+          document.getElementById('error-message').style.display = 'block';
+        } else {
+          // Format the date to the required format
+          var formattedDate = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss.SSS');
+          input.value = formattedDate; // Set the formatted date back to the input
+          console.log('Formatted Date:', formattedDate); // For debugging
+        }
+      });
+    });
+
 
 </script>
 

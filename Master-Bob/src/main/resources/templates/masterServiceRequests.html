@@ -13,12 +13,34 @@
           background-color: #ffcc00;
           font-weight: bold;
         }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px;
+            width: auto;
+        }
+
+        .search {
+            margin-right: 50px;
+        }
+
+        .main-div {
+            margin-left: 700px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
+        }
   </style>
 
 </head>
 <body>
 
-<div th:fragment="masterServiceRequests">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div>
@@ -31,21 +53,21 @@
         [[${message}]]
     </div>
 
-    <h1 class="text-center">My service requests</h1>
+    <h2 class="text-center">My service requests</h2>
 
     <table class="table table-bordered table-striped">
-        <thead class="thead-dark" style="background-color: lightyellow;">
+        <thead class="thead-dark" style="background-color: #ffcc00;">
         <tr>
-            <th>Customer name</th>
-            <th>Customer surname</th>
-            <th>Customer address</th>
-            <th>Additional info</th>
-            <th>Job</th>
-            <th>Service status</th>
-            <th>Date begin</th>
-            <th>Date end</th>
-            <th>Edit service request</th>
-            <th>Delete service request</th>
+            <th style="text-align: center;">Customer name</th>
+            <th style="text-align: center;">Customer surname</th>
+            <th style="text-align: center;">Customer address</th>
+            <th style="text-align: center;">Additional info</th>
+            <th style="text-align: center;">Job</th>
+            <th style="text-align: center;">Service status</th>
+            <th style="text-align: center;">Date begin</th>
+            <th style="text-align: center;">Date end</th>
+            <th style="text-align: center;">Edit service request</th>
+            <th style="text-align: center;">Delete service request</th>
         </tr>
         </thead>
         <tbody id="serviceRequestsTableBody">
@@ -59,12 +81,12 @@
             <td th:text="${serviceRequest.dateTimeBegin}">Date begin</td>
             <td th:text="${serviceRequest.dateTimeEnd}">Date end</td>
             <td style="text-align: center;">
-                <a class="btn btn-info btn-sm" th:href="@{'/service-request/edit/' + ${serviceRequest.id}}">
+                <a class="btn custom-btn" th:href="@{'/service-request/edit/' + ${serviceRequest.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
             </td>
             <td style="text-align: center;">
-                <a th:href="@{'/service-request/delete/' + ${serviceRequest.id}}">
+                <a class="btn custom-btn" th:href="@{'/service-request/delete/' + ${serviceRequest.id}}">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
             </td>
@@ -72,7 +94,6 @@
         </tbody>
     </table>
 
-</div>
 </div>
 </body>
 </html>

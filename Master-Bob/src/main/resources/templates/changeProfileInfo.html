@@ -4,15 +4,50 @@
   <meta charset="UTF-8">
   <title>Master Bob - Change profile info</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
+        .container {
+            display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 115vh;
+        }
+
         .form-group-button {
             display: flex;
             justify-content: space-between;
         }
 
-        .custom-btn {
+        .custom-btn, .div-header {
           background-color: #ffcc00;
           font-weight: bold;
+        }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px; /* Adjust image height */
+            width: auto; /* Maintain aspect ratio */
+        }
+
+        .search {
+            margin-right: 50px;
+        }
+
+        .main-div {
+            margin-left: 700px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
         }
   </style>
 </head>
@@ -23,8 +58,8 @@
 <div class="container">
   <div class="row col-md-8 offset-md-2">
     <div class="card">
-      <div class="card-header">
-        <h2 class="text-center" th:text="${user.name}">Change profile info</h2>
+      <div class="card-header div-header">
+        <h2 class="text-center" style="font-weight: bold;" th:text="${user.name}">Change profile info</h2>
       </div>
       <div th:if="${message != null}" class="alert alert-success">
         [[${message}]]

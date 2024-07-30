@@ -82,7 +82,8 @@ public class LoginController {
           model.addAttribute("errorMessage", "User was not found in the database.");
       }
 
-      Set<JobCategory> jobCategories = userDb.get().getJobCategories();
+      // selected job categories
+      Set<JobCategory> jobCategories = user.getJobCategories();
 
       String userPassword = userDb.get().getPassword();
 
@@ -107,7 +108,7 @@ public class LoginController {
         }
 
         String text = "Dear " +  user.getName() + " " + user.getSurname() + ", "
-                + "Your profile info have been changed. Master Bob Team";
+                + "Your profile info has been changed. Best regards, Master Bob Team";
         registrationService.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com" /*user.getEmail()*/,"Changed profile info",
                 text
                 ,"Integration Test");

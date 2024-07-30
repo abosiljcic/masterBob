@@ -54,4 +54,9 @@ public class AdminService {
     public void saveJob (Job job) {jobRepository.save(job);}
 
     public void saveJobCategory(JobCategory jobCategory) {jobCategoryRepository.save(jobCategory);}
+
+    public void deleteJobCategory(Integer id)
+    {
+        jobCategoryRepository.deleteById(id);
+    }
 }

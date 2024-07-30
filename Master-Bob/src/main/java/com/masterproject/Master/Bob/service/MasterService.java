@@ -46,8 +46,23 @@ public class MasterService {
 
         if(serviceRequestOpt.isPresent())
         {
-            serviceRequest.setDateTimeBeginString(serviceRequest.getDateTimeBegin().toString());
-            serviceRequest.setDateTimeEndString(serviceRequest.getDateTimeEnd().toString());
+            if (serviceRequest.getDateTimeBegin() == null)
+            {
+                serviceRequest.setDateTimeBeginString("");
+            }
+            else
+            {
+                serviceRequest.setDateTimeBeginString(serviceRequest.getDateTimeBegin().toString());
+            }
+
+            if (serviceRequest.getDateTimeEnd() == null)
+            {
+                serviceRequest.setDateTimeEndString("");
+            }
+            else
+            {
+                serviceRequest.setDateTimeEndString(serviceRequest.getDateTimeEnd().toString());
+            }
         }
 
         return  serviceRequest;
@@ -62,7 +77,7 @@ public class MasterService {
         Timestamp dateTimeEnd = dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeEndString());
 
         // Provera da li je master dostupan u tom periodu
-        if(!checkMastersAvailaility(serviceRequest.getMaster().getId(),dateTimeBegin,dateTimeEnd))
+        if(!checkMastersAvailability(serviceRequest.getMaster().getId(),dateTimeBegin,dateTimeEnd, serviceRequest.getId()))
         {
             return "You are not available during that period!";
         }
@@ -73,7 +88,7 @@ public class MasterService {
         // Salje se mejl obavestenja customer-u da je service request koji je kreirao promenjen
         Email email = new Email();
         String text = "Dear " + serviceRequest.getCustomer().getName() + " " + serviceRequest.getCustomer().getSurname() +
-                ", The service request " + serviceRequest.getId() + " you created has been changed. Please check your account, Master Bob Team";
+                ", The service request " + serviceRequest.getId() + " you created has been changed. Please check your account. Best regards, Master Bob Team";
         try {
             email.sendEmail("mailtrap@demomailtrap.com","anabos12300@gmail.com","Edited service request " + serviceRequest.getId(),text,"");
         } catch (IOException e) {
@@ -84,8 +99,8 @@ public class MasterService {
         return "";
     }
 
-    private boolean checkMastersAvailaility (Integer masterId, Timestamp dateTimeBegin, Timestamp dateTimeEnd)
+    private boolean checkMastersAvailability (Integer masterId, Timestamp dateTimeBegin, Timestamp dateTimeEnd, Integer serviceRequestId)
     {
-        return serviceRequestRepository.getAvailableMasters(masterId, dateTimeBegin, dateTimeEnd);
+        return serviceRequestRepository.getAvailableMasters(masterId, dateTimeBegin, dateTimeEnd, serviceRequestId);
     }
 }

@@ -47,7 +47,14 @@ public class AdminController {
 
     @RequestMapping("/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id, Model model) {
-        adminService.deleteUser(id);
+        try {
+            adminService.deleteUser(id);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "You cannot delete this user because there are requests created/managed by that user.");
+            return getAllUsers(model);
+        }
         model.addAttribute("message","Successfully deleted user!");
         return getAllUsers(model);
     }
@@ -55,8 +62,31 @@ public class AdminController {
     @RequestMapping("/job/delete/{id}")
     public String deleteJob(@PathVariable(name="id") Integer id, Model model)
     {
-        adminService.deleteJob(id);
+        try {
+            adminService.deleteJob(id);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "You cannot delete this job because there are requests for it.");
+            return getAllJobs(model);
+        }
         model.addAttribute("message","Successfully deleted job!");
+        return getAllJobs(model);
+    }
+    @RequestMapping("/delete-category/{id}")
+    public String deleteCategory(@PathVariable(name = "id") Integer id, Model model)
+    {
+        try
+        {
+            adminService.deleteJobCategory(id);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "You cannot delete this category because there are jobs in that category.");
+            return getAllJobs(model);
+        }
+
+        model.addAttribute("message", "Successfully deleted category!");
         return getAllJobs(model);
     }
 

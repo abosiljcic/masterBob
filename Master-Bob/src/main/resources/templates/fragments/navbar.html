@@ -8,11 +8,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
+
     <style>
-.custom-btn {
+        .custom-btn {
           background-color: #ffcc00;
           font-weight: bold;
         }
+
+        .main-div {
+            margin-left: 700px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
+        }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px; /* Adjust image height */
+            width: auto; /* Maintain aspect ratio */
+        }
+
+        .search {
+            margin-left: 50px;
+        }
+
     </style>
 
 </head>
@@ -22,32 +48,42 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand" href="/" style="font-family: Jazz LET, fantasy; font-weight: bold;"><img th:src="@{/images/logo.png}" alt=""></a>
+    <a class="navbar-brand a-img" href="/" style="font-family: Jazz LET, fantasy; font-weight: bold;"><img th:src="@{/images/logo.png}" alt=""></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse main-div" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li>
-                <div sec:authorize="hasRole('admin')">
+                <div sec:authorize="hasRole('admin')" class="users-btn">
                     <button type="button" class="btn custom-btn" th:onclick="|window.location.href='/user/admin/getAllUsers'|">
                         Users
                     </button>
                 </div>
             </li>
             <li>
-                <div sec:authorize="hasRole('admin')">
+                <div sec:authorize="hasRole('admin')" class="jobs-btn">
                     <button type="button" class="btn custom-btn" th:onclick="|window.location.href='/user/admin/getAllJobs'|">
                         Jobs
                     </button>
                 </div>
             </li>
+
+            <li class="nav-item search">
+
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </li>
+
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-user"></span>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu div-dropdown" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" th:href="@{/login}" sec:authorize="!isAuthenticated()">Log in</a>
                     <a class="dropdown-item" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
                     <a class="dropdown-item" th:href="@{/logout}" sec:authorize="isAuthenticated()">
@@ -60,14 +96,6 @@
                         Service requests
                     </a>
                 </div>
-            </li>
-
-            <li class="nav-item">
-
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
             </li>
         </ul>
     </div>

@@ -38,7 +38,7 @@ public class ServiceRequest {
     private Timestamp dateTimeEnd;
 
     private String dateTimeEndString;
-
+    @Column(name = "post_code")
     private String postCode;
     @Column(name = "additional_info")
     private String additionalInfo;

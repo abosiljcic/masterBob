@@ -77,7 +77,7 @@ public class LoginService implements UserDetailsService {
     public User changeProfileInfo(User user, Set<JobCategory> jobCategories) {
 
         // ako master prestane da se bavi necim proveriti da li u tom sektoru ima service request-ova
-        if (user.getRole().equals("master") && !checkMasterServices(user.getId(), jobCategories))
+        if (user.getRole().equals("master") && checkMasterServices(user.getId(), jobCategories))
         {
             return null;
         }
