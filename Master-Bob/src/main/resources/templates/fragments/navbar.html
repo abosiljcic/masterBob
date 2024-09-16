@@ -16,6 +16,15 @@
           font-weight: bold;
         }
 
+        .custom-a:hover {
+            background-color: #ffcc00;
+            text-decoration: none;
+        }
+
+        .custom-a {
+            text-decoration: none;
+        }
+
         .main-div {
             margin-left: 700px;
         }
@@ -84,19 +93,19 @@
                     <span class="glyphicon glyphicon-user"></span>
                 </a>
                 <div class="dropdown-menu div-dropdown" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" th:href="@{/login}" sec:authorize="!isAuthenticated()">Log in</a>
-                    <a class="dropdown-item" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
-                    <a class="dropdown-item" th:href="@{/logout}" sec:authorize="isAuthenticated()">
+                    <a class="dropdown-item custom-a" th:href="@{/login}" sec:authorize="!isAuthenticated()">Log in</a>
+                    <a class="dropdown-item custom-a" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
+                    <a class="dropdown-item custom-a" th:href="@{/logout}" sec:authorize="isAuthenticated()">
                         Logout
                     </a>
-                    <a class="dropdown-item" th:href="@{/change-profile-info}" sec:authorize="isAuthenticated()">
+                    <a class="dropdown-item custom-a" th:href="@{/change-profile-info}" sec:authorize="isAuthenticated()">
                         Change profile info
                     </a>
-                    <a class="dropdown-item" th:href="@{/user/master/service-request}" sec:authorize="hasRole('master')">
+                    <a class="dropdown-item custom-a" th:href="@{/user/master/service-request}" sec:authorize="hasRole('master')">
                         Service requests
                     </a>
 
-                    <a class="dropdown-item" th:href="@{/user/customer/service-request}" sec:authorize="hasRole('customer')">
+                    <a class="dropdown-item custom-a" th:href="@{/user/customer/service-request}" sec:authorize="hasRole('customer')">
                         Service requests
                     </a>
                 </div>

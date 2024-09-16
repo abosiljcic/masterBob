@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -115,7 +114,7 @@ public class AdminController {
         return "editJob";
     }
 
-    @PostMapping("/new_job")
+    @PostMapping("/new-job")
     public String addNewJob (@ModelAttribute Job job, Model model)
     {
         if(job.getId() == null)
@@ -131,7 +130,7 @@ public class AdminController {
         return getAllJobs(model);
     }
 
-    @PostMapping("new_job_category")
+    @PostMapping("new-job-category")
     public String addNewJobCategory (@ModelAttribute JobCategory jobCategory, Model model)
     {
         adminService.saveJobCategory(jobCategory);

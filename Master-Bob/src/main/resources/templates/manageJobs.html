@@ -17,6 +17,15 @@
           font-weight: bold;
         }
 
+        .custom-a:hover {
+            background-color: #ffcc00;
+            text-decoration: none;
+        }
+
+        .custom-a {
+            text-decoration: none;
+        }
+
         .main-div {
             margin-left: 700px;
         }
@@ -112,7 +121,7 @@
             <form
                     method="post"
                     role="form"
-                    th:action="@{/user/admin/new_job}"
+                    th:action="@{/user/admin/new-job}"
                     th:object="${job}"
             >
               <div class="form-group mb-3">
@@ -193,7 +202,7 @@
             <form
                     method="post"
                     role="form"
-                    th:action="@{/user/admin/new_job_category}"
+                    th:action="@{/user/admin/new-job-category}"
                     th:object="${jobCategory}"
             >
               <div class="form-group mb-3">

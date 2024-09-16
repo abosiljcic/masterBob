@@ -15,9 +15,22 @@
             justify-content: space-between;
         }
 
-        .custom-btn {
+        .custom-btn, .div-header {
           background-color: #ffcc00;
           font-weight: bold;
+        }
+
+        h2 {
+          font-weight: bold;
+        }
+
+        .custom-a:hover {
+            background-color: #ffcc00;
+            text-decoration: none;
+        }
+
+        .custom-a {
+            text-decoration: none;
         }
 
         .main-div {
@@ -35,6 +48,14 @@
             margin-left: 25px;
             margin-right: 50px;
         }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 85vh;
+        }
+
   </style>
 </head>
 <body>
@@ -44,7 +65,7 @@
 <div class="container">
   <div class="row col-md-8 offset-md-2">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header div-header">
         <h2 class="text-center">Registration</h2>
       </div>
       <div th:if="${message != null}" class="alert alert-success">
