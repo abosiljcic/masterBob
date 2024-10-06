@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Master Bob - Book a date</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/all.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css">
+
+    <style>
+  .container {
+            display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+        }
+
+  .content {
+  flex: 1;
+  padding: 20px;
+  }
+
+  .image {
+  flex: 1;
+  text-align: center;
+  }
+
+  .image img {
+  max-width: 100%;
+  max-height: 100%;
+  }
+
+        .custom-btn, .div-header {
+          background-color: #ffcc00;
+          font-weight: bold;
+        }
+
+        .custom-a:hover {
+            background-color: #ffcc00;
+            text-decoration: none;
+        }
+
+        .custom-a {
+            text-decoration: none;
+        }
+
+        .main-div {
+            margin-left: 980px;
+        }
+
+        .users-btn {
+            margin-right: 20px;
+        }
+
+        .jobs-btn {
+            margin-right: 20px;
+        }
+
+        .a-img {
+            margin-right: 15px;
+            margin-bottom: 25px;
+            max-height: 70px;
+            width: auto;
+        }
+
+        .search {
+            margin-right: 50px;
+        }
+
+        #error-message, #error-message-time {
+      color: red;
+      display: none;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header div-header">
+            <h2 class="text-center" style="font-weight: bold;"> Book a date </h2>
+        </div>
+
+        <div th:if="${errorMessage != null}" class="alert alert-danger">
+            [[${errorMessage}]]
+        </div>
+
+        <div class="card-body">
+            <form id="service-form" th:action="@{/user/master/book-a-date}" method="post" th:object="${serviceRequest}">
+                <div class="form-group mb-3">
+                    <label>Job</label>
+                    <select class="form-control" id="job" name="job">
+                        <option value="" disabled>Select job</option>
+                        <th:block th:each="job : ${jobList}">
+                            <option th:value="${job.id}" th:text="${job.name}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="address">Address:</label>
+                    <input
+                            class="form-control"
+                            id="address"
+                            name="address"
+                            placeholder="Enter address"
+                            th:field="*{customerAddress}"
+                            type="text"
+                    />
+                    <p th:errors = "*{customerAddress}" class="text-danger"
+                       th:if="${#fields.hasErrors('customerAddress')}"></p>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="serviceDateBegin">Service date begin</label>
+                    <input
+                            class="form-control datetimepicker"
+                            id="serviceDateBegin"
+                            name="serviceDateBegin"
+                            placeholder="Enter service date begin"
+                            th:field="*{dateTimeBeginString}"
+                            type="datetime-local"
+                            required
+                    />
+                    <p th:errors = "*{dateTimeBeginString}" class="text-danger"
+                       th:if="${#fields.hasErrors('dateTimeBeginString')}"></p>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="serviceDateEnd">Service date end</label>
+                    <input
+                            class="form-control datetimepicker"
+                            id="serviceDateEnd"
+                            name="serviceDateEnd"
+                            placeholder="Enter service date end"
+                            th:field="*{dateTimeEndString}"
+                            type="datetime-local"
+                            required
+                    />
+                    <p th:errors = "*{dateTimeEndString}" class="text-danger"
+                       th:if="${#fields.hasErrors('dateTimeEndString')}"></p>
+                    <p id="error-message-time">You have to choose a date greater than Date begin.</p>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="additionalInfo">Additional info (describe in more detail what you need)</label>
+                    <textarea class="form-control" id="additionalInfo" name="additionalInfo" th:field="*{additionalInfo}"></textarea><br>
+                    <p th:errors = "*{additionalInfo}" class="text-danger"
+                       th:if="${#fields.hasErrors('additionalInfo')}"></p>
+                </div>
+
+                <div class="form-group-button">
+                    <button class="btn custom-btn" type="submit">Save</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set minimum date and time to now
+var now = new Date();
+var minDate = now.toISOString().slice(0, 16);
+document.getElementById("serviceDateBegin").min = minDate;
+
+ document.addEventListener('DOMContentLoaded', function () {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to midnight for minDate
+
+      flatpickr("#serviceDateBegin", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i:S.SSS", // Adjusted format
+    time_24hr: true,
+    defaultDate: new Date(),
+    minDate: today,
+});
+
+flatpickr("#serviceDateEnd", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i:S.SSS", // Adjusted format
+    time_24hr: true,
+    defaultDate: new Date(),
+    minDate: today,
+});
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to midnight for minDate
+
+    // Fetch the initial values set by Thymeleaf
+    var initialDateTimeBegin = document.getElementById('serviceDateBegin').value;
+    var initialDateTimeEnd = document.getElementById('serviceDateEnd').value;
+
+    flatpickr("#serviceDateBegin", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    time_24hr: true,
+    defaultDate: new Date(),
+    minDate: today,
+});
+
+flatpickr("#serviceDateEnd", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    time_24hr: true,
+    defaultDate: new Date(),
+    minDate: today,
+});
+
+    document.getElementById('service-form').addEventListener('submit', function(event) {
+        var inputBegin = document.getElementById('serviceDateBegin');
+        var inputEnd = document.getElementById('serviceDateEnd');
+        var selectedDateBegin = new Date(inputBegin.value);
+        var selectedDateEnd = new Date(inputEnd.value);
+
+        var errorMessageTime = document.getElementById('error-message-time');
+        var valid = true;
+
+        // Check if end date is greater than begin date
+        if (selectedDateEnd < selectedDateBegin) {
+            errorMessageTime.style.display = 'block';
+            valid = false;
+        } else {
+            errorMessageTime.style.display = 'none';
+        }
+
+        if (!valid) {
+            event.preventDefault();
+        } else {
+            var formattedDateBegin = moment(selectedDateBegin).format('YYYY-MM-DD HH:mm:ss.SSS');
+            var formattedDateEnd = moment(selectedDateEnd).format('YYYY-MM-DD HH:mm:ss.SSS');
+            inputBegin.value = formattedDateBegin;
+            inputEnd.value = formattedDateEnd;
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>

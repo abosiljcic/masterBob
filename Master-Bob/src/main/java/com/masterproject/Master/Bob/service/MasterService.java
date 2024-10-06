@@ -1,13 +1,14 @@
 package com.masterproject.Master.Bob.service;
 
-import com.masterproject.Master.Bob.model.ServiceRequest;
-import com.masterproject.Master.Bob.model.ServiceStatus;
-import com.masterproject.Master.Bob.model.User;
+import com.masterproject.Master.Bob.model.*;
+import com.masterproject.Master.Bob.repository.JobCategoryRepository;
+import com.masterproject.Master.Bob.repository.JobRepository;
 import com.masterproject.Master.Bob.repository.ServiceRequestRepository;
 import com.masterproject.Master.Bob.repository.UserRepository;
 import com.masterproject.Master.Bob.utility.DateTimeConverter;
 import com.masterproject.Master.Bob.utility.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,24 @@ public class MasterService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    JobRepository jobRepository;
+
+    @Autowired
+    JobCategoryRepository jobCategoryRepository;
+
+    public List<JobCategory> getAllJobCategories ()
+    {
+        return jobCategoryRepository.findAll();
+    }
+    public Optional<User> getUserById (Integer id)
+    {
+        return userRepository.findById(id);
+    }
+    public List<Job> getAllJobs ()
+    {
+        return jobRepository.findAll();
+    }
     public List<ServiceRequest> getAllMasterServiceRequests (Integer masterId)
     {
         return serviceRequestRepository.findAllMasterServiceRequests(masterId);
@@ -97,6 +116,28 @@ public class MasterService {
         }
 
         return "";
+    }
+
+    public String saveServiceRequest(ServiceRequest serviceRequest)
+    {
+        System.out.println("Date time begin string: " + serviceRequest.getDateTimeBeginString());
+        System.out.println("Date time end string: " + serviceRequest.getDateTimeEndString());
+
+        DateTimeConverter dateTimeConverter = new DateTimeConverter();
+        serviceRequest.setDateTimeBegin(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeBeginString()));
+        serviceRequest.setDateTimeEnd(dateTimeConverter.convertToTimestamp(serviceRequest.getDateTimeEndString()));
+
+        System.out.println("Date time begin: " + serviceRequest.getDateTimeBegin());
+        System.out.println("Date time end: " + serviceRequest.getDateTimeEnd());
+
+        if(!checkMastersAvailability(serviceRequest.getMaster().getId(),serviceRequest.getDateTimeBegin(),serviceRequest.getDateTimeEnd(), -2))
+        {
+            return "You are not available during that period!";
+        }
+
+        serviceRequestRepository.save(serviceRequest);
+
+        return "Date successfully booked!";
     }
 
     private boolean checkMastersAvailability (Integer masterId, Timestamp dateTimeBegin, Timestamp dateTimeEnd, Integer serviceRequestId)

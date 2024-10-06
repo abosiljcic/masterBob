@@ -96,6 +96,10 @@
                         Service requests
                     </a>
 
+                    <a class="dropdown-item custom-a" th:href="@{/user/master/book-a-date}" sec:authorize="hasRole('master')">
+                        Book a date
+                    </a>
+
                     <a class="dropdown-item custom-a" th:href="@{/user/customer/service-request}" sec:authorize="hasRole('customer')">
                         Service requests
                     </a>

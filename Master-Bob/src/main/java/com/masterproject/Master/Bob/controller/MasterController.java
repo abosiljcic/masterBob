@@ -36,6 +36,50 @@ public class MasterController {
         return "masterServiceRequests";
     }
 
+    @GetMapping("/book-a-date")
+    public String getBookADatePage (Model model) {
+        ServiceRequest serviceRequest = new ServiceRequest();
+        List<Job> jobs = masterService.getAllJobs();
+
+        model.addAttribute("serviceRequest",serviceRequest);
+        model.addAttribute("jobList", jobs);
+
+        return "bookDate";
+    }
+
+    @PostMapping("/book-a-date")
+    public String bookADate(@ModelAttribute ServiceRequest serviceRequest, Model model)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Optional<User> master = masterService.getUserByUsername(username);
+        if(master.isEmpty())
+        {
+            model.addAttribute("errorMessage","User is not recognized!");
+            return "errorPage";
+        }
+        serviceRequest.setMaster(master.get());
+
+        // Kada majstor bukira datum, onda je id user-a 1
+        User user = masterService.getUserById(1).get();
+
+        serviceRequest.setCustomer(user);
+        // Postavljanje statusa service request-a
+        serviceRequest.setServiceStatus(ServiceStatus.PENDING);
+
+        String message = masterService.saveServiceRequest(serviceRequest);
+        if(message.equals("You are not available during that period!"))
+        {
+            model.addAttribute("errorMessage",message);
+            return getBookADatePage(model);
+        }
+
+        model.addAttribute("message",message);
+
+        return getMasterServiceRequests(model);
+    }
+
     @RequestMapping("/service-request/delete/{id}")
     public String deleteServiceRequest(@PathVariable(name = "id") Integer serviceRequestId, Model model) {
         masterService.deleteServiceRequestById(serviceRequestId);
