@@ -187,7 +187,7 @@
                th:if="${#fields.hasErrors('phoneNumber')}"></p>
           </div>
 
-          <div sec:authorize="hasRole('master')">
+          <div sec:authorize="hasRole('contractor')">
             <div class="form-group mb-3">
               <label>Job category</label>
               <select multiple="multiple" th:field="*{jobCategories}">

@@ -76,8 +76,8 @@ public class LoginService implements UserDetailsService {
 
     public User changeProfileInfo(User user, Set<JobCategory> jobCategories) {
 
-        // ako master prestane da se bavi necim proveriti da li u tom sektoru ima service request-ova
-        if (user.getRole().equals("master") && checkMasterServices(user.getId(), jobCategories))
+        // ako contractor prestane da se bavi necim proveriti da li u tom sektoru ima service request-ova
+        if (user.getRole().equals("contractor") && checkContractorServices(user.getId(), jobCategories))
         {
             return null;
         }
@@ -102,9 +102,9 @@ public class LoginService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    private boolean checkMasterServices (Integer masterId, Set<JobCategory> jobCategories)
+    private boolean checkContractorServices (Integer contractorId, Set<JobCategory> jobCategories)
     {
-        List<ServiceRequest> serviceRequestList = serviceRequestRepository.findAllMasterServiceRequests(masterId);
+        List<ServiceRequest> serviceRequestList = serviceRequestRepository.findAllContractorServiceRequests(contractorId);
         for (ServiceRequest sr : serviceRequestList)
         {
             if (jobCategories.contains(sr.getJob().getCategory()))

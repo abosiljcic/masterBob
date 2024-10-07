@@ -92,11 +92,11 @@
                     <a class="dropdown-item custom-a" th:href="@{/change-profile-info}" sec:authorize="isAuthenticated()">
                         Change profile info
                     </a>
-                    <a class="dropdown-item custom-a" th:href="@{/user/master/service-request}" sec:authorize="hasRole('master')">
+                    <a class="dropdown-item custom-a" th:href="@{/user/contractor/service-request}" sec:authorize="hasRole('contractor')">
                         Service requests
                     </a>
 
-                    <a class="dropdown-item custom-a" th:href="@{/user/master/book-a-date}" sec:authorize="hasRole('master')">
+                    <a class="dropdown-item custom-a" th:href="@{/user/contractor/book-a-date}" sec:authorize="hasRole('contractor')">
                         Book a date
                     </a>
 

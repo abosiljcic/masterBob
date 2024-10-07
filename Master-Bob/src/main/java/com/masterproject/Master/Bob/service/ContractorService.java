@@ -8,7 +8,6 @@ import com.masterproject.Master.Bob.repository.UserRepository;
 import com.masterproject.Master.Bob.utility.DateTimeConverter;
 import com.masterproject.Master.Bob.utility.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MasterService {
+public class ContractorService {
 
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
@@ -46,7 +45,7 @@ public class MasterService {
     }
     public List<ServiceRequest> getAllMasterServiceRequests (Integer masterId)
     {
-        return serviceRequestRepository.findAllMasterServiceRequests(masterId);
+        return serviceRequestRepository.findAllContractorServiceRequests(masterId);
     }
     public Optional<User> getUserByUsername (String username)
     {

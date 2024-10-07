@@ -36,8 +36,8 @@ public class User {
     @OneToMany(mappedBy = "customer")
     private List<ServiceRequest> customerServiceRequests;
 
-    @OneToMany(mappedBy = "master")
-    private List<ServiceRequest> masterServiceRequests;
+    @OneToMany(mappedBy = "contractor")
+    private List<ServiceRequest> contractorServiceRequests;
     private String role;
 
     @Column(name = "post_code")
@@ -170,12 +170,12 @@ public class User {
         this.customerServiceRequests = customerServiceRequests;
     }
 
-    public List<ServiceRequest> getMasterServiceRequests() {
-        return masterServiceRequests;
+    public List<ServiceRequest> getContractorServiceRequests() {
+        return contractorServiceRequests;
     }
 
-    public void setMasterServiceRequests(List<ServiceRequest> masterServiceRequests) {
-        this.masterServiceRequests = masterServiceRequests;
+    public void setContractorServiceRequests(List<ServiceRequest> contractorServiceRequests) {
+        this.contractorServiceRequests = contractorServiceRequests;
     }
 
     public String getPostCode() {

@@ -18,8 +18,8 @@ public class ServiceRequest {
     private User customer;
 
     @ManyToOne
-    @JoinColumn(name = "master_id")
-    private User master;
+    @JoinColumn(name = "contractor_id")
+    private User contractor;
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -47,11 +47,11 @@ public class ServiceRequest {
     private String customerAddress;
 
     public User getMaster() {
-        return master;
+        return contractor;
     }
 
-    public void setMaster(User master) {
-        this.master = master;
+    public void setMaster(User contractor) {
+        this.contractor = contractor;
     }
 
     public Job getJob() {

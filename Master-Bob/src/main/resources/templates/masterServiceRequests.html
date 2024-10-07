@@ -100,14 +100,14 @@
             <td style="text-align: center;">
                 <a class="btn custom-btn"
                    th:classappend="${serviceRequest.serviceStatus == T(com.masterproject.Master.Bob.model.ServiceStatus).FINISHED ? ' disabled-icon' : ''}"
-                   th:href="@{'/user/master/service-request/edit/' + ${serviceRequest.id}}">
+                   th:href="@{'/user/contractor/service-request/edit/' + ${serviceRequest.id}}">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
             </td>
             <td style="text-align: center;">
                 <a class="btn custom-btn"
                    th:classappend="${serviceRequest.serviceStatus == T(com.masterproject.Master.Bob.model.ServiceStatus).FINISHED ? ' disabled-icon' : ''}"
-                   th:href="@{'/user/master/service-request/delete/' + ${serviceRequest.id}}">
+                   th:href="@{'/user/contractor/service-request/delete/' + ${serviceRequest.id}}">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
             </td>

@@ -52,7 +52,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/register", "/login", "/category/**", "/job-description/**").permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/customer/**").hasRole("customer")
-                         .requestMatchers("/master/**").hasRole("master")
+                         .requestMatchers("/contractor/**").hasRole("contractor")
                          .requestMatchers("/admin/**").hasRole("admin")
                         .anyRequest().authenticated()
                 ).formLogin(AbstractAuthenticationFilterConfigurer::permitAll)

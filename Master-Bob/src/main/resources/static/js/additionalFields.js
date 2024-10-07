@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     additionalFields.style.display = "none"
 
     accountType.addEventListener("change", function() {
-        if (accountType.value === "master") {
+        if (accountType.value === "contractor") {
             additionalFields.style.display = "block";
             addressInput.required = true;
             categoryInput.required = true;
