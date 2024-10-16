@@ -1,4 +1,4 @@
-# masterBob
+# Master Bob
 
 Master Bob is a platform for connecting users with contractors from various sectors. The main function of the application is to allow users to quickly and 
 easily find qualified contractors in their vicinity, tailored to their individual needs. The application provides users with a simple experience for selecting the 
@@ -11,3 +11,4 @@ the user and the contractor, contributing to transparency and efficiency in comm
 
 - Backend: Java, Spring Boot (MVC Architecture)
 - Frontend: Thymeleaf
+- Database: SQL server
